@@ -1,0 +1,167 @@
+/* ════════════════════════════════════════════════════════════════════
+   App shell — layout comune a tutte le sezioni (desktop).
+   Le regole responsive sono in media.css.
+   Gli stili specifici di una sezione stanno nella sua cartella (es. Bio/Bio.css).
+   ════════════════════════════════════════════════════════════════════ */
+
+.App {
+	width: 100%;
+	height: 100vh;
+	background-color: rgb(250, 250, 250);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.App-header {
+	width: 80%;
+	height: 80%;
+	display: flex;
+}
+
+/* ── Colonna sinistra ── */
+.LeftCl {
+	height: 100%;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: start;
+}
+
+.Name {
+	font-size: 60px;
+	margin-left: 150px;
+}
+
+.bio {
+	margin-top: 0px;
+	margin-left: 150px;
+	width: 70%;
+	font-size: 20px;
+	color: rgb(160, 160, 160);
+	padding: 10px;
+}
+
+/* ── Colonna destra ── */
+.RightCl {
+	height: 108%;
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* ── Crossfade foto profilo ── */
+.profilePic-wrapper {
+	margin-left: 140px;
+	width: 350px;
+	height: 350px;
+	border-radius: 50%;
+	overflow: hidden;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	animation: subtleMove 10s infinite alternate ease-in-out;
+	position: relative;
+	flex-shrink: 0;
+}
+
+.pic-layer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: opacity 0.5s ease;
+}
+
+.pic-layer.hidden {
+	opacity: 0;
+}
+
+@keyframes subtleMove {
+	0% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(10px, 10px);
+	}
+	100% {
+		transform: translate(0, 0);
+	}
+}
+
+/* ── Navbar sezioni ── */
+.sections {
+	color: rgb(46, 46, 46);
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	gap: 30px;
+	padding: 0px;
+	margin: 0px;
+	cursor: pointer;
+	border-bottom: none;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.sections li {
+	padding-bottom: 0px;
+	transition: all 0.5s;
+	border-bottom: 2px solid transparent;
+	text-align: center;
+}
+
+.sections li:hover {
+	color: black;
+	border-bottom: 2px solid black;
+}
+
+.sections li.active {
+	color: black;
+	border-bottom: 2px solid black;
+}
+
+/* ── Fade del contenuto al cambio sezione ──
+   .bioSheet-wrapper ha la propria transition in Bio/Bio.css. */
+.cMaster,
+.c3 {
+	transition: opacity 0.3s ease;
+}
+
+.section-fading {
+	opacity: 0;
+}
+
+/* ── Layout a tre box (HOME e sezioni non ancora implementate) ── */
+.cMaster {
+	display: flex;
+	width: 100%;
+	height: 50%;
+	flex-flow: row wrap;
+	justify-content: center;
+}
+
+.c1 {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 45%;
+	height: 85%;
+	margin: auto;
+	border-radius: 10px;
+}
+
+.c2 {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 45%;
+	height: 85%;
+	margin: auto;
+	border-radius: 10px;
+}
+
+.c3 {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 95%;
+	height: 60%;
+	border-radius: 10px;
+}

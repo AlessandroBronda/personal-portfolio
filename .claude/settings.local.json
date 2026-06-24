@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(run)",
+      "PowerShell($proc = Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c cd `\"C:\\\\Users\\\\VG Admin\\\\Desktop\\\\PortfolioWeb-2.2.4\\\\PortfolioWeb-2.2.4\\\\portfolio`\" && npm start\" -PassThru -WindowStyle Hidden; $proc.Id)",
+      "Bash(timeout 40 bash *)",
+      "Bash(chromium-cli *)",
+      "Bash(node -e \"require\\('playwright'\\)\")",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Start-Process \"http://localhost:3000\")",
+      "Bash(curl -sf http://localhost:3000)",
+      "PowerShell($env:CHOKIDAR_USEPOLLING = \"true\"; Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c cd `\"C:\\\\Users\\\\VG Admin\\\\Desktop\\\\PortfolioWeb-2.2.4\\\\PortfolioWeb-2.2.4\\\\portfolio`\" && set CHOKIDAR_USEPOLLING=true && npm start\" -WindowStyle Normal)",
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-Object -Last 30)"
+    ]
+  }
+}

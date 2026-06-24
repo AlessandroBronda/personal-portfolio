@@ -1,0 +1,83 @@
+/* ════════════════════════════════════════════════════════════════════
+   Stili della sezione BIO: foglio editor + pannello competenze.
+   Palette autonoma VS Code Dark+ (NON quella del resto del sito).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Foglio bio (entrata in fade-in) ── */
+@keyframes bioFadeIn {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+.bioSheet-wrapper {
+	width: 100%;
+	animation: bioFadeIn 1.5s ease;
+	/* fade-out al cambio sezione (la classe .section-fading è in App.css) */
+	transition: opacity 0.3s ease;
+}
+
+.bioSheet {
+	width: 100%;
+	height: 70vh;
+	background-color: #1e1e1e;
+	border-radius: 12px;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+	margin: 40px auto 0;
+	margin-left: 0px;
+	overflow: hidden;
+}
+
+/* ── Pannello competenze (editor) ── */
+.skill-panel {
+	font-family: "Consolas", "Courier New", monospace;
+	font-size: 13px;
+	line-height: 1.65;
+	color: #d4d4d4;
+	padding: 20px 0;
+	height: 100%;
+	box-sizing: border-box;
+	overflow-y: auto;
+}
+
+.code-line {
+	display: flex;
+	align-items: baseline;
+}
+
+.gutter {
+	min-width: 44px;
+	padding-right: 20px;
+	text-align: right;
+	color: #858585;
+	user-select: none;
+	flex-shrink: 0;
+}
+
+.code-content {
+	white-space: pre;
+}
+
+/* ── Colori syntax VS Code Dark+ ── */
+.sk-keyword  { color: #569cd6; }
+.sk-variable { color: #9cdcfe; }
+.sk-string   { color: #ce9178; }
+.sk-comment  { color: #6a9955; }
+.sk-punct    { color: #d4d4d4; }
+.sk-bar      { color: #808080; }
+.sk-legend   { color: #acabab; }
+
+/* ── Cursore lampeggiante (effetto digitazione) ── */
+.cursor {
+	display: inline-block;
+	width: 2px;
+	height: 1em;
+	background-color: #d4d4d4;
+	vertical-align: text-bottom;
+	margin-left: 1px;
+	animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0; }
+}
