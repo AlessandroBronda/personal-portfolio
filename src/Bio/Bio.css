@@ -81,3 +81,20 @@
 	0%, 100% { opacity: 1; }
 	50%       { opacity: 0; }
 }
+
+/* ── Mobile: codice tutto visibile, nessuna scrollbar ── */
+@media (max-width: 800px) {
+	.bioSheet {
+		height: auto; /* il foglio cresce per contenere tutto il codice */
+	}
+	.skill-panel {
+		height: auto;
+		overflow: hidden; /* niente scrollbar interna */
+		font-size: 11px;
+		padding: 16px 0;
+	}
+	.gutter {
+		min-width: 30px;
+		padding-right: 12px;
+	}
+}

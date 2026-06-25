@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 const SKILL_GROUPS = [
 	{
@@ -45,13 +45,21 @@ function makeBar(level) {
 	return '▰'.repeat(level) + '▱'.repeat(5 - level);
 }
 
-// Colonna dove inizia [ nelle righe delle skill
-// prefix = 6 (indent) + " + key + " + : = key.length + 9
 const MAX_KEY_LEN = Math.max(
 	...SKILL_GROUPS.flatMap(g => g.skills.map(s => s.key.length))
 );
-const BRACKET_COL = MAX_KEY_LEN + 9 + 2; // 2 spazi minimi dopo la chiave più lunga
 
+// Indentazione delle skill: ampia su desktop, ridotta su mobile per far
+// stare tutte le righe nel box senza scroll orizzontale.
+const INDENT_DESKTOP = 6;
+const INDENT_MOBILE = 3;
+
+// Colonna dove inizia "[": indent + virgolette(2) + due punti(1) + chiave + pad(2)
+function getBracketCol(indent) {
+	return indent + MAX_KEY_LEN + 5;
+}
+
+// Righe strutturali (indipendenti dall'indentazione)
 function buildLines() {
 	const lines = [];
 
@@ -74,7 +82,9 @@ function buildLines() {
 	return lines;
 }
 
-function getLineTokens(line) {
+const LINES = buildLines();
+
+function getLineTokens(line, indent, bracketCol) {
 	switch (line.type) {
 		case 'const':
 			return [
@@ -85,10 +95,11 @@ function getLineTokens(line) {
 		case 'section':
 			return [{ text: `  // ${line.label}`, className: 'sk-comment' }];
 		case 'skill': {
-			const prefix = `      "${line.key}":`;
-			const pad = ' '.repeat(BRACKET_COL - prefix.length);
+			const lead = ' '.repeat(indent);
+			const prefix = `${lead}"${line.key}":`;
+			const pad = ' '.repeat(Math.max(bracketCol - prefix.length, 1));
 			return [
-				{ text: '      ',            className: ''          },
+				{ text: lead,                className: ''          },
 				{ text: `"${line.key}"`,     className: 'sk-string' },
 				{ text: ':',                 className: 'sk-punct'  },
 				{ text: pad,                 className: ''          },
@@ -108,34 +119,42 @@ function getLineTokens(line) {
 	}
 }
 
-const LINES = buildLines();
-
-// Token arrays e conteggi caratteri per riga (calcolati una volta sola)
-const LINE_TOKENS = LINES.map(getLineTokens);
-const LINE_CHAR_COUNTS = LINE_TOKENS.map(tokens =>
-	tokens.reduce((sum, { text }) => sum + text.length, 0)
-);
-const LINE_START_CHARS = [];
-let _cum = 0;
-LINE_CHAR_COUNTS.forEach(n => { LINE_START_CHARS.push(_cum); _cum += n; });
-const TOTAL_CHARS = _cum;
-
 // ── Timing (modifica questi valori per regolare l'animazione) ──
 const ENTRANCE_MS   = 1500; // durata animazione entrata bioSheet
-const PAUSE_MS      = 1200; // pausa con cursore prima della digitazione
-const TYPING_MS     = 2000; // durata totale digitazione
+const PAUSE_MS      = 200;  // pausa con cursore prima della digitazione
+const TYPING_MS     = 2500; // durata totale digitazione
 
 function SkillPanel() {
 	const [visibleChars, setVisibleChars] = useState(0);
 	const [started, setStarted]           = useState(false);
+	const [isSmall, setIsSmall]           = useState(() => window.innerWidth < 800);
 	const timerRef = useRef(null);
 	const rafRef   = useRef(null);
+
+	// Aggiorna l'indentazione quando si attraversa il breakpoint mobile.
+	useEffect(() => {
+		const onResize = () => setIsSmall(window.innerWidth < 800);
+		window.addEventListener('resize', onResize);
+		return () => window.removeEventListener('resize', onResize);
+	}, []);
+
+	// Token e conteggi caratteri, ricalcolati solo al cambio di indentazione.
+	const { lineTokens, lineCharCounts, lineStartChars, totalChars } = useMemo(() => {
+		const indent = isSmall ? INDENT_MOBILE : INDENT_DESKTOP;
+		const bracketCol = getBracketCol(indent);
+		const tokens = LINES.map((l) => getLineTokens(l, indent, bracketCol));
+		const counts = tokens.map((t) => t.reduce((s, { text }) => s + text.length, 0));
+		const starts = [];
+		let cum = 0;
+		counts.forEach((n) => { starts.push(cum); cum += n; });
+		return { lineTokens: tokens, lineCharCounts: counts, lineStartChars: starts, totalChars: cum };
+	}, [isSmall]);
 
 	useEffect(() => {
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		if (reduced) {
 			setStarted(true);
-			setVisibleChars(TOTAL_CHARS);
+			setVisibleChars(Number.MAX_SAFE_INTEGER);
 			return;
 		}
 
@@ -144,7 +163,7 @@ function SkillPanel() {
 			const t0 = performance.now();
 			const tick = (now) => {
 				const progress = Math.min((now - t0) / TYPING_MS, 1);
-				setVisibleChars(Math.floor(progress * TOTAL_CHARS));
+				setVisibleChars(Math.ceil(progress * 1e6)); // valore relativo, clampato sotto
 				if (progress < 1) rafRef.current = requestAnimationFrame(tick);
 			};
 			rafRef.current = requestAnimationFrame(tick);
@@ -156,7 +175,9 @@ function SkillPanel() {
 		};
 	}, []);
 
-	const isDone = visibleChars >= TOTAL_CHARS;
+	// visibleChars è un valore "grezzo" su scala 1e6: lo riscalo sui caratteri reali.
+	const shownChars = Math.min(Math.floor((visibleChars / 1e6) * totalChars), totalChars);
+	const isDone = shownChars >= totalChars;
 
 	// Fase di pausa: pannello vuoto con solo cursore
 	if (!started) {
@@ -172,16 +193,16 @@ function SkillPanel() {
 
 	return (
 		<div className="skill-panel">
-			{LINE_TOKENS.map((tokens, lineIdx) => {
-				const lineStart = LINE_START_CHARS[lineIdx];
-				const lineLen   = LINE_CHAR_COUNTS[lineIdx];
+			{lineTokens.map((tokens, lineIdx) => {
+				const lineStart = lineStartChars[lineIdx];
+				const lineLen   = lineCharCounts[lineIdx];
 				const lineEnd   = lineStart + lineLen;
 
-				if (visibleChars < lineStart) return null;
+				if (shownChars < lineStart) return null;
 
-				const charsInLine   = Math.min(visibleChars - lineStart, lineLen);
-				const isCurrentLine = visibleChars >= lineStart && visibleChars < lineEnd;
-				const isLastLine    = lineIdx === LINE_TOKENS.length - 1;
+				const charsInLine   = Math.min(shownChars - lineStart, lineLen);
+				const isCurrentLine = shownChars >= lineStart && shownChars < lineEnd;
+				const isLastLine    = lineIdx === lineTokens.length - 1;
 
 				// Costruisce gli span visibili per questa riga
 				const spans = [];

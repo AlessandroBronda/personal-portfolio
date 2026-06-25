@@ -1,0 +1,80 @@
+/* ════════════════════════════════════════════════════════════════════
+   Sezione HOME — contenuti dei box.
+   Il pannello contatti riempie il box c1 con il proprio sfondo fucsia
+   (così il colore resta limitato alla HOME, non tocca le altre sezioni).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── Box c1: Contatti ── */
+.contacts {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	background-color: rgb(243, 90, 174); /* rosa fucsia + trasparenza */
+	border-radius: 10px;
+	padding: 24px 28px;
+	color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 18px;
+	overflow: hidden;
+}
+
+.contacts-title {
+	margin: 0;
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+}
+
+.contacts-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.contact-item {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.contact-icon {
+	display: flex;
+	width: 22px;
+	height: 22px;
+	flex-shrink: 0;
+}
+
+.contact-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.contact-text {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.25;
+	min-width: 0;
+}
+
+.contact-label {
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	opacity: 0.8;
+}
+
+.contact-value {
+	font-size: 15px;
+	color: #ffffff;
+	text-decoration: none;
+	word-break: break-word;
+}
+
+.contact-value:hover {
+	text-decoration: underline;
+}

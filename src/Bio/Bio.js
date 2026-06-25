@@ -22,6 +22,13 @@ export const section = {
 	label: "BIO",
 	avatar,
 	render: Bio,
+	// Testi della colonna sinistra specifici per la sezione BIO
+	name: "Illustratore e 3D Generalist",
+	bio:
+		"“Unisco competenze tecniche e sensibilità visiva per costruire progetti " +
+		"completi, dall'idea alla realizzazione. 3D, grafica e codice sono i miei " +
+		"strumenti; il risultato è ciò che conta.”",
+	bioItalic: true,
 };
 
 export default Bio;

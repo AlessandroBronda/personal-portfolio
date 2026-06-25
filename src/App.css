@@ -11,26 +11,41 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: background-color 0.4s ease;
 }
 
 .App-header {
 	width: 80%;
 	height: 80%;
+	max-width: 1500px; /* oltre questa larghezza la disposizione resta identica */
 	display: flex;
 }
 
-/* ── Colonna sinistra ── */
+/* ── Colonna sinistra ──
+   Centrata verticalmente per allinearsi alla colonna destra.
+   Il blocco di testo (.LeftCl-text) ha un'altezza FISSA: così la somma
+   foto + testo è costante e il cerchio resta nella stessa posizione
+   passando da HOME a BIO, qualunque sia la lunghezza di titolo/paragrafo. */
 .LeftCl {
 	height: 100%;
 	width: 50%;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	justify-content: center;
+	gap: 5px;
 	align-items: start;
 }
 
+.LeftCl-text {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 100%;
+	height: 320px; /* riserva fissa: il testo non sposta il cerchio */
+}
+
 .Name {
-	font-size: 60px;
+	font-size: 52px;
 	margin-left: 150px;
 }
 
@@ -41,6 +56,21 @@
 	font-size: 20px;
 	color: rgb(160, 160, 160);
 	padding: 10px;
+}
+
+.bio-italic {
+	font-style: italic;
+}
+
+/* Fade-in al cambio sezione (Name e bio vengono rimontati con una key) */
+.Name,
+.bio {
+	animation: textSwapIn 0.5s ease;
+}
+
+@keyframes textSwapIn {
+	from { opacity: 0; }
+	to   { opacity: 1; }
 }
 
 /* ── Colonna destra ── */
@@ -123,6 +153,26 @@
 	border-bottom: 2px solid black;
 }
 
+/* Rimbalzo al click: rimpicciolisce e torna a grandezza piena.
+   Cambia 0.8 per regolare quanto si rimpicciolisce (es. 0.2 = molto più piccolo). */
+.sections li.clicked {
+	animation: navClickBounce 0.5s;
+}
+
+@keyframes navClickBounce {
+	0% {
+		transform: scale(1);
+		animation-timing-function: ease-in;
+	} /* shrink: parte lento */
+	50% {
+		transform: scale(0.8);
+		animation-timing-function: ease-out;
+	} /* ritorno: scatta via */
+	100% {
+		transform: scale(1);
+	}
+}
+
 /* ── Fade del contenuto al cambio sezione ──
    .bioSheet-wrapper ha la propria transition in Bio/Bio.css. */
 .cMaster,
@@ -164,4 +214,108 @@
 	width: 95%;
 	height: 60%;
 	border-radius: 10px;
+}
+
+/* Transizione morbida dei colori al cambio tema */
+.Name,
+.bio,
+.sections,
+.sections li {
+	transition:
+		color 0.4s ease,
+		border-color 0.4s ease,
+		background-color 0.4s ease;
+}
+
+.c1,
+.c2,
+.c3 {
+	transition:
+		background-color 0.4s ease,
+		opacity 0.3s ease;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Barra superiore (full-width, frosted) con hamburger + toggle tema.
+   È fissa: segue lo scorrimento e sfoca ciò che le passa sotto.
+   ════════════════════════════════════════════════════════════════════ */
+.topbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 30;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 20px;
+	background: rgba(255, 255, 255, 0.55);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	transition: background-color 0.4s ease;
+}
+
+body.dark .topbar {
+	background: rgba(40, 40, 42, 0.55);
+}
+
+.theme-toggle {
+	margin-left: auto; /* sempre allineato a destra nella barra */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	color: #333;
+	transition:
+		transform 0.3s ease,
+		color 0.4s ease;
+}
+
+.theme-toggle:hover {
+	transform: scale(1.15);
+}
+
+body.dark .theme-toggle {
+	color: #f1f1f1;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Tema scuro (attivo con la classe .dark sul <body>)
+   Il foglio BIO ha già una sua palette da editor e resta invariato.
+   ════════════════════════════════════════════════════════════════════ */
+body.dark .App {
+	background-color: #252527;
+}
+
+body.dark .Name {
+	color: #f1f1f1;
+}
+
+body.dark .bio {
+	color: rgb(140, 140, 140);
+}
+
+body.dark .sections {
+	color: rgb(200, 200, 200);
+}
+
+body.dark .sections li:hover,
+body.dark .sections li.active {
+	color: #ffffff;
+	border-bottom-color: #ffffff;
+}
+
+body.dark .c1,
+body.dark .c2,
+body.dark .c3 {
+	background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .hamburger {
+	color: rgb(220, 220, 220);
 }

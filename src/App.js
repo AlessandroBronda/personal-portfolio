@@ -31,10 +31,20 @@ const AVATARS = [...new Set(SECTIONS.map((s) => s.avatar))];
 // Durata (ms) del fade-out del contenuto prima di cambiare sezione.
 const FADE_MS = 300;
 
+// Testi di default della colonna sinistra (una sezione può sovrascriverli
+// con i campi `name` / `bio` / `bioItalic` nel suo config).
+const DEFAULT_NAME = "Alessandro Bronda";
+const DEFAULT_BIO =
+	"Ciao, sono un freelance e mi occupo di 3D, grafica e programmazione. Mi piace " +
+	"unire diverse discipline per dare vita a progetti creativi, d'impatto, funzionali " +
+	"ma sopratutto belli.";
+
 function App() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeSection, setActiveSection] = useState("HOME");
 	const [isFading, setIsFading] = useState(false);
+	const [clickedItem, setClickedItem] = useState(null);
+	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
 	const isMobileNav = screenWidth >= 800 && screenWidth < 1450;
@@ -49,6 +59,12 @@ function App() {
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
+
+	// Applica il tema al <body> e lo salva tra le sessioni.
+	useEffect(() => {
+		document.body.classList.toggle("dark", theme === "dark");
+		localStorage.setItem("theme", theme);
+	}, [theme]);
 
 	// Cambio sezione con fade-out → swap → fade-in.
 	const handleNavClick = useCallback(
@@ -67,8 +83,14 @@ function App() {
 	const navItems = NAV_ITEMS.map((item) => (
 		<li
 			key={item}
-			className={activeSection === item ? "active" : ""}
-			onClick={() => handleNavClick(item)}
+			className={`${activeSection === item ? "active" : ""} ${
+				clickedItem === item ? "clicked" : ""
+			}`}
+			onClick={() => {
+				setClickedItem(item);
+				handleNavClick(item);
+			}}
+			onAnimationEnd={() => setClickedItem(null)}
 		>
 			{item}
 		</li>
@@ -78,6 +100,49 @@ function App() {
 
 	return (
 		<div className="App">
+			{/* Barra superiore fissa: hamburger (mobile) + toggle tema */}
+			<div className="topbar">
+			<button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+				☰
+			</button>
+			<button
+				className="theme-toggle"
+				onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+				aria-label="Cambia tema"
+			>
+				{theme === "light" ? (
+					// Luna (passa al tema scuro)
+					<svg
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="1.5"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+					>
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+					</svg>
+				) : (
+					// Sole (passa al tema chiaro)
+					<svg
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="1.5"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+					>
+						<circle cx="12" cy="12" r="4" />
+						<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+					</svg>
+				)}
+			</button>
+			</div>
+
 			{/* Navbar superiore (solo su tablet) */}
 			{isMobileNav && (
 				<nav className={`sections ${menuOpen ? "open" : ""}`}>
@@ -88,9 +153,6 @@ function App() {
 			)}
 
 			<header className="App-header">
-				<button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-					☰
-				</button>
 
 				{/* Colonna sinistra: avatar (crossfade), nome, bio breve */}
 				<div className="LeftCl">
@@ -104,12 +166,17 @@ function App() {
 							/>
 						))}
 					</div>
-					<h1 className="Name">Alessandro Bronda</h1>
-					<p className="bio">
-						Ciao, sono un freelance e mi occupo di 3D, grafica e programmazione. Mi piace
-						unire diverse discipline per dare vita a progetti creativi, d'impatto, funzionali
-						ma sopratutto belli.
-					</p>
+					<div className="LeftCl-text">
+						<h1 className="Name" key={`name-${activeSection}`}>
+							{active.name || DEFAULT_NAME}
+						</h1>
+						<p
+							className={`bio ${active.bioItalic ? "bio-italic" : ""}`}
+							key={`bio-${activeSection}`}
+						>
+							{active.bio || DEFAULT_BIO}
+						</p>
+					</div>
 				</div>
 
 				{/* Colonna destra: navbar (desktop/mobile) + contenuto della sezione */}
