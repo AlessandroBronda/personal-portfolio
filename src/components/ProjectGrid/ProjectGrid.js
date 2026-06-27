@@ -21,10 +21,12 @@ function ProjectGrid({ category, isFading }) {
       )}
       {!loading && !error && projects.length > 0 && (
         <div className="project-grid">
-          {projects.map((project) => (
+          {projects.map((project, i) => (
             <button
               key={project.id}
               className="grid-cell"
+              // Ritardo progressivo per la comparsa a cascata (max ~0.75s).
+              style={{ animationDelay: `${Math.min(i, 15) * 0.05}s` }}
               onClick={() => setSelectedProject(project)}
               aria-label={project.title}
             >

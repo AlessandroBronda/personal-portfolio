@@ -220,6 +220,30 @@
 		margin-left: auto;
 	}
 
+	/* Nome categoria centrato nella barra (solo sezioni progetto). */
+	.glass-shell-title {
+		position: absolute;
+		left: 50%;
+		top: 0;
+		transform: translateX(-50%);
+		height: var(--bar-h);
+		display: flex;
+		align-items: center;
+		font-size: 16px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: rgba(20, 20, 20, 0.92);
+		pointer-events: none;   /* non intercetta i click su hamburger/toggle */
+		white-space: nowrap;
+		max-width: 60%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	body.dark .glass-shell-title {
+		color: rgba(245, 245, 245, 0.95);
+	}
+
 	/* ── Hamburger super minimale: solo barre, nessun box ── */
 	.hamburger {
 		all: unset;

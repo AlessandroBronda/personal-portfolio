@@ -14,3 +14,19 @@ body {
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+/* ── Nasconde TUTTE le scrollbar, mantenendo lo scroll funzionante ──
+   Lo scroll (rotellina, touch, tastiera) continua a funzionare; sparisce
+   solo la barra visibile. Vantaggio collaterale: la barra non riserva più
+   ~15px di larghezza, quindi niente "scatto" del layout quando, durante il
+   caricamento delle immagini, comparirebbe e poi sparirebbe. */
+* {
+	scrollbar-width: none;        /* Firefox */
+	-ms-overflow-style: none;     /* Edge / IE legacy */
+}
+
+*::-webkit-scrollbar {
+	display: none;                /* Chrome, Safari, Edge (Chromium) */
+	width: 0;
+	height: 0;
+}

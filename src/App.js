@@ -189,6 +189,11 @@ function App() {
 							<span className="hamburger-bar" />
 							<span className="hamburger-bar" />
 						</button>
+						{/* Nome della categoria al centro: solo per le sezioni a tutta
+						    larghezza (i progetti), mai per HOME e BIO. */}
+						{isFullWidth && (
+							<span className="glass-shell-title">{active.label}</span>
+						)}
 						{themeToggleButton()}
 					</div>
 					<ul className={`glass-shell-nav ${menuOpen ? "open" : ""}`}>{navItems}</ul>
