@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "generatedAt": "2026-06-27T20:28:18.488273Z",
+  "categories": {
+    "3d": {
+      "label": "Progetti 3D"
+    },
+    "animazione": {
+      "label": "Animazione"
+    },
+    "grafica": {
+      "label": "Grafica"
+    },
+    "programmazione": {
+      "label": "Programmazione"
+    }
+  },
+  "projects": []
+}
