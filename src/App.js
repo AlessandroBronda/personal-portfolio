@@ -97,52 +97,66 @@ function App() {
 		</li>
 	));
 
+	// Toggle tema riutilizzabile (topbar, guscio mobile, navbar full-width).
+	const themeToggleButton = (className = "theme-toggle") => (
+		<button
+			className={className}
+			onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+			aria-label="Cambia tema"
+		>
+			{theme === "light" ? (
+				// Luna (passa al tema scuro)
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+				</svg>
+			) : (
+				// Sole (passa al tema chiaro)
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+					<circle cx="12" cy="12" r="4" />
+					<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+				</svg>
+			)}
+		</button>
+	);
+
 	const fadeClass = isFading ? "section-fading" : "";
 
 	return (
 		<div className={`App ${isFullWidth ? "App--full-width" : ""}`}>
-			{/* Barra superiore fissa: hamburger (mobile) + toggle tema */}
-			<div className="topbar">
-			<button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-				☰
-			</button>
-			<button
-				className="theme-toggle"
-				onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-				aria-label="Cambia tema"
-			>
-				{theme === "light" ? (
-					// Luna (passa al tema scuro)
-					<svg
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="1.5"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-					</svg>
-				) : (
-					// Sole (passa al tema chiaro)
-					<svg
-						width="20"
-						height="20"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="1.5"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<circle cx="12" cy="12" r="4" />
-						<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-					</svg>
-				)}
-			</button>
-			</div>
+			{/* Barra superiore (tablet/desktop): solo toggle tema.
+			    Su mobile è sostituita dal guscio in vetro unico qui sotto. */}
+			{screenWidth >= 800 && (
+				<div className="topbar">{themeToggleButton()}</div>
+			)}
+
+			{/* ── Mobile: guscio in vetro unico ──
+			    Topbar e drawer sono lo STESSO elemento: una sola superficie di
+			    vetro ritagliata con clip-path. Chiusa = solo la barra in alto;
+			    aperta = barra + colonna a sinistra in un'unica forma a Γ. */}
+			{screenWidth < 800 && (
+				<div className={`glass-shell ${menuOpen ? "open" : ""}`}>
+					<div className="glass-shell-bar">
+						<button
+							className={`hamburger ${menuOpen ? "open" : ""}`}
+							onClick={() => setMenuOpen(!menuOpen)}
+							aria-label="Apri o chiudi il menu"
+							aria-expanded={menuOpen}
+						>
+							<span className="hamburger-bar" />
+							<span className="hamburger-bar" />
+							<span className="hamburger-bar" />
+						</button>
+						{themeToggleButton()}
+					</div>
+					<ul className={`glass-shell-nav ${menuOpen ? "open" : ""}`}>{navItems}</ul>
+				</div>
+			)}
+
+			{/* Scrim: oscura lo sfondo e chiude il menu cliccando fuori (solo mobile) */}
+			<div
+				className={`nav-scrim ${menuOpen ? "open" : ""}`}
+				onClick={() => setMenuOpen(false)}
+			/>
 
 			{/* Navbar superiore (solo su tablet) */}
 			{isMobileNav && (
@@ -182,28 +196,11 @@ function App() {
 
 				{/* Colonna destra: navbar (desktop/mobile) + contenuto della sezione */}
 				<div className={`RightCl ${isFullWidth ? "RightCl--full" : ""}`}>
-					{!isMobileNav && (
+					{screenWidth >= 1450 && (
 						<ul className={`sections ${menuOpen ? "open" : ""}`}>
 							{navItems}
-							{isFullWidth && screenWidth >= 1450 && (
-								<li className="nav-theme-toggle">
-									<button
-										className="theme-toggle"
-										onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-										aria-label="Cambia tema"
-									>
-										{theme === "light" ? (
-											<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-												<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-											</svg>
-										) : (
-											<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-												<circle cx="12" cy="12" r="4" />
-												<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-											</svg>
-										)}
-									</button>
-								</li>
+							{isFullWidth && (
+								<li className="nav-theme-toggle">{themeToggleButton()}</li>
 							)}
 						</ul>
 					)}
