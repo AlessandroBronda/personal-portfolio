@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-06-27T21:16:56.654148Z",
+  "generatedAt": "2026-06-27T21:19:34.920866Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -15,114 +15,5 @@
       "label": "Programmazione"
     }
   },
-  "projects": [
-    {
-      "id": "d625a85a-39b4-4199-9750-f72fbfdecd8e",
-      "slug": "1",
-      "category": "3d",
-      "title": "1",
-      "description": "1",
-      "cover": {
-        "src": "images/3d/1/cover.webp",
-        "thumb": "images/3d/1/thumbs/cover.webp",
-        "width": 625,
-        "height": 625
-      },
-      "media": [],
-      "tags": [],
-      "order": 0,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    },
-    {
-      "id": "bee6044f-baae-4b3b-b08b-55609f0eba3e",
-      "slug": "2",
-      "category": "3d",
-      "title": "2",
-      "description": "2",
-      "cover": {
-        "src": "images/3d/2/cover.webp",
-        "thumb": "images/3d/2/thumbs/cover.webp",
-        "width": 612,
-        "height": 612
-      },
-      "media": [],
-      "tags": [],
-      "order": 10,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    },
-    {
-      "id": "888a9e34-8f58-428d-8325-c8a24b364a5b",
-      "slug": "3",
-      "category": "3d",
-      "title": "3",
-      "description": "3",
-      "cover": {
-        "src": "images/3d/3/cover.webp",
-        "thumb": "images/3d/3/thumbs/cover.webp",
-        "width": 625,
-        "height": 625
-      },
-      "media": [],
-      "tags": [],
-      "order": 20,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    },
-    {
-      "id": "68e7b162-4893-4f64-95b8-b4472cfaac86",
-      "slug": "4",
-      "category": "3d",
-      "title": "4",
-      "description": "4",
-      "cover": {
-        "src": "images/3d/4/cover.webp",
-        "thumb": "images/3d/4/thumbs/cover.webp",
-        "width": 164,
-        "height": 164
-      },
-      "media": [],
-      "tags": [],
-      "order": 30,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    },
-    {
-      "id": "1a6422fc-e887-466a-b4c6-e2c66089010b",
-      "slug": "5",
-      "category": "3d",
-      "title": "5",
-      "description": "5",
-      "cover": {
-        "src": "images/3d/5/cover.webp",
-        "thumb": "images/3d/5/thumbs/cover.webp",
-        "width": 425,
-        "height": 425
-      },
-      "media": [],
-      "tags": [],
-      "order": 40,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    },
-    {
-      "id": "719824f7-d056-4fd8-9a07-f87225911c5c",
-      "slug": "6",
-      "category": "3d",
-      "title": "6",
-      "description": "6",
-      "cover": {
-        "src": "images/3d/6/cover.webp",
-        "thumb": "images/3d/6/thumbs/cover.webp",
-        "width": 418,
-        "height": 418
-      },
-      "media": [],
-      "tags": [],
-      "order": 50,
-      "createdAt": "2026-06-27T21:16:56.619272Z",
-      "updatedAt": "2026-06-27T21:16:56.619272Z"
-    }
-  ]
+  "projects": []
 }
