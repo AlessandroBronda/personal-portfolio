@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-06-27T16:45:23.763318Z",
+  "generatedAt": "2026-06-27T17:05:39.991435Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -15,36 +15,5 @@
       "label": "Programmazione"
     }
   },
-  "projects": [
-    {
-      "id": "b2dd9352-baf6-4601-9706-476eb54f1f6a",
-      "slug": "test",
-      "category": "3d",
-      "title": "Test",
-      "description": "Test",
-      "cover": {
-        "src": "images/3d/test/cover.webp",
-        "thumb": "images/3d/test/thumbs/cover.webp",
-        "width": 999,
-        "height": 999
-      },
-      "media": [
-        {
-          "kind": "wip",
-          "type": "image",
-          "caption": "",
-          "src": "images/3d/test/01-test.webp",
-          "thumb": "images/3d/test/thumbs/01-test.webp",
-          "width": 1920,
-          "height": 1080,
-          "provider": null,
-          "url": null
-        }
-      ],
-      "tags": [],
-      "order": 0,
-      "createdAt": "2026-06-27T16:45:23.746366Z",
-      "updatedAt": "2026-06-27T16:45:23.746366Z"
-    }
-  ]
+  "projects": []
 }
