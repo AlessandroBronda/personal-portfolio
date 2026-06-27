@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 
-// Base URL per la CDN (produzione e staging)
+// Base URL per la CDN (produzione e staging).
+// NB: le risorse del portfolio (manifest.json + images/) vivono sul branch
+// DEDICATO "assets", gestito esclusivamente da PortfolioUploader. Il sorgente
+// React sta su "main" e non contiene mai questi file: così un push del codice
+// non può intaccare ciò che è stato pubblicato.
 const CDN_BASE =
-  "https://cdn.jsdelivr.net/gh/AlessandroBronda/personal-portfolio@main";
+  "https://cdn.jsdelivr.net/gh/AlessandroBronda/personal-portfolio@assets";
 
 // In sviluppo locale con anteprima attiva:
 //   crea .env.development.local e aggiungi:

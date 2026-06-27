@@ -13,6 +13,12 @@
 # anteprima locale generata da PortfolioUploader — mai committare
 /public/preview/
 
+# Risorse del portfolio: gestite SOLO da PortfolioUploader sul branch "assets".
+# Non devono MAI essere tracciate/pushate da questo repo (main = solo codice),
+# altrimenti un push del React sovrascriverebbe i progetti pubblicati.
+/manifest.json
+/images/
+
 # misc
 .DS_Store
 .env.local
