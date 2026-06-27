@@ -19,6 +19,7 @@
 	height: 80%;
 	max-width: 1500px; /* oltre questa larghezza la disposizione resta identica */
 	display: flex;
+	transition: width 0.5s ease, height 0.5s ease, padding-top 0.5s ease;
 }
 
 /* ── Colonna sinistra ──
@@ -34,6 +35,15 @@
 	justify-content: center;
 	gap: 5px;
 	align-items: start;
+	overflow: hidden;
+	flex-shrink: 0;
+	transition: width 0.5s ease, opacity 0.4s ease, transform 0.5s ease;
+}
+
+.LeftCl--hidden {
+	width: 0 !important;
+	opacity: 0;
+	transform: translateX(-24px);
 }
 
 .LeftCl-text {
@@ -80,6 +90,8 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	min-width: 0;
+	transition: width 0.5s ease;
 }
 
 /* ── Crossfade foto profilo ── */
@@ -318,4 +330,67 @@ body.dark .c3 {
 
 body.dark .hamburger {
 	color: rgb(220, 220, 220);
+}
+
+/* ── Layout a piena larghezza (sezioni Progetti 3D / Animazione / Grafica / Programmazione) ── */
+.App-header--full {
+	width: 95%;
+	max-width: 100%;
+	height: 100%;
+}
+
+.RightCl--full {
+	width: 100%;
+	height: 100%;
+	align-items: stretch;
+}
+
+/* Su mobile, la LeftCl--hidden sparisce istantaneamente (no animazione). */
+@media (max-width: 800px) {
+	.LeftCl--hidden {
+		display: none !important;
+	}
+}
+
+/* ── Desktop (>1450px): topbar trasparente; toggle si sposta nella navbar in full-width ── */
+@media (min-width: 1451px) {
+	.topbar {
+		background: transparent !important;
+		backdrop-filter: none !important;
+		box-shadow: none !important;
+	}
+
+	body.dark .topbar {
+		background: transparent !important;
+	}
+
+	/* In full-width: toggle nella navbar → topbar diventa inerte e invisibile */
+	.App--full-width .topbar {
+		pointer-events: none;
+	}
+
+	.App--full-width .topbar .theme-toggle {
+		display: none;
+	}
+
+	.App-header--full {
+		padding-top: 14px;
+		box-sizing: border-box;
+	}
+}
+
+/* ── Toggle tema nel navbar (solo full-width desktop) ── */
+.sections li.nav-theme-toggle {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	border-bottom: 2px solid transparent !important;
+}
+
+.sections li.nav-theme-toggle:hover {
+	border-bottom: 2px solid transparent !important;
+}
+
+.sections li.nav-theme-toggle .theme-toggle {
+	margin-left: 0;
 }

@@ -1,14 +1,16 @@
-// ── Sezione PROGETTI 3D (da implementare) ─────────────────────────────
-// Placeholder: usa il layout a box di App.js finché non avrà un render proprio.
-// Per un layout custom: imposta `render` su un componente che riceve
-// { screenWidth, isFading }, come fa Bio.
+import React from "react";
+import ProjectGrid from "../components/ProjectGrid/ProjectGrid";
 
 const avatar = process.env.PUBLIC_URL + "/semoy.jpg";
 
+function Progetti3DSection(props) {
+  return <ProjectGrid {...props} category="3d" />;
+}
+
 export const section = {
-	key: "PROGETTI 3D",
-	label: "PROGETTI 3D",
-	avatar,
-	render: null,
-	boxes: { c1: null, c2: null, c3: null },
+  key: "PROGETTI 3D",
+  label: "PROGETTI 3D",
+  avatar,
+  render: Progetti3DSection,
+  fullWidth: true,
 };

@@ -125,20 +125,29 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
-		gap: 40px;
+		gap: 5px;
 	}
+	/* Su mobile: foto e titolo affiancati in alto (riga "pic name"),
+	   bio sotto a tutta larghezza (riga "bio bio").
+	   .LeftCl-text usa display:contents così .Name e .bio diventano
+	   celle dirette della griglia di .LeftCl. */
 	.LeftCl {
 		margin-top: 60px;
 		height: auto;
 		width: 100%;
-		justify-content: flex-start;
-		align-items: flex-start;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-areas:
+			"pic name"
+			"bio bio";
+		align-items: center;
+		column-gap: 18px;
+		row-gap: 16px;
 		text-align: left;
-		gap: 16px;
 	}
 
 	.LeftCl-text {
-		height: auto;
+		display: contents;
 	}
 	.RightCl {
 		height: auto;
@@ -216,27 +225,27 @@
 	}
 
 	.Name {
-		font-size: 33px;
-		margin: auto;
-		margin-left: 40px;
-		margin-top: 40px;
-		margin-bottom: 0px;
+		grid-area: name;
+		font-size: 28px;
+		margin: 0;
 	}
 
 	.profilePic-wrapper {
+		grid-area: pic;
 		margin-left: 35px;
-		margin-top: 20px;
+		margin-top: 0;
 		width: 130px;
 		height: 130px;
 		animation: none;
 	}
 
 	.bio {
+		grid-area: bio;
 		padding: 0px;
 		width: 80%;
-		margin: auto;
-		margin-top: 30px;
-		margin-left: 40px;
+		margin: 0;
+		margin-left: 35px;
+		margin-top: 14px;
 		border-radius: 0;
 		box-shadow: none;
 		font-weight: 500;
@@ -267,7 +276,7 @@
 	.bioSheet {
 		width: 90%;
 		height: auto;
-		margin: 20px auto 0;
+		margin: 10px auto !important; 
 	}
 }
 

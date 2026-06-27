@@ -152,7 +152,9 @@ function SkillPanel() {
 
 	useEffect(() => {
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (reduced) {
+		// Su mobile (e con reduced-motion) niente macchina da scrivere: il codice
+		// è mostrato subito per intero e compare con un fade-in (vedi Bio.css).
+		if (reduced || isSmall) {
 			setStarted(true);
 			setVisibleChars(Number.MAX_SAFE_INTEGER);
 			return;
@@ -173,14 +175,17 @@ function SkillPanel() {
 			clearTimeout(timerRef.current);
 			cancelAnimationFrame(rafRef.current);
 		};
-	}, []);
+	}, [isSmall]);
 
-	// visibleChars è un valore "grezzo" su scala 1e6: lo riscalo sui caratteri reali.
-	const shownChars = Math.min(Math.floor((visibleChars / 1e6) * totalChars), totalChars);
+	// Su mobile mostro tutto subito; su desktop riscalo visibleChars (scala 1e6)
+	// sui caratteri reali per l'effetto digitazione progressivo.
+	const shownChars = isSmall
+		? totalChars
+		: Math.min(Math.floor((visibleChars / 1e6) * totalChars), totalChars);
 	const isDone = shownChars >= totalChars;
 
-	// Fase di pausa: pannello vuoto con solo cursore
-	if (!started) {
+	// Fase di pausa: pannello vuoto con solo cursore (solo desktop, durante l'attesa)
+	if (!started && !isSmall) {
 		return (
 			<div className="skill-panel">
 				<div className="code-line">
@@ -192,7 +197,7 @@ function SkillPanel() {
 	}
 
 	return (
-		<div className="skill-panel">
+		<div className={`skill-panel ${isSmall ? 'skill-panel--fade' : ''}`}>
 			{lineTokens.map((tokens, lineIdx) => {
 				const lineStart = lineStartChars[lineIdx];
 				const lineLen   = lineCharCounts[lineIdx];

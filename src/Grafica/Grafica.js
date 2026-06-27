@@ -1,12 +1,16 @@
-// ── Sezione GRAFICA (da implementare) ─────────────────────────────────
-// Placeholder: usa il layout a box di App.js finché non avrà un render proprio.
+import React from "react";
+import ProjectGrid from "../components/ProjectGrid/ProjectGrid";
 
 const avatar = process.env.PUBLIC_URL + "/semoy.jpg";
 
+function GraficaSection(props) {
+  return <ProjectGrid {...props} category="grafica" />;
+}
+
 export const section = {
-	key: "GRAFICA",
-	label: "GRAFICA",
-	avatar,
-	render: null,
-	boxes: { c1: null, c2: null, c3: null },
+  key: "GRAFICA",
+  label: "GRAFICA",
+  avatar,
+  render: GraficaSection,
+  fullWidth: true,
 };

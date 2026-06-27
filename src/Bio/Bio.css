@@ -97,4 +97,12 @@
 		min-width: 30px;
 		padding-right: 12px;
 	}
+	/* Su mobile le competenze compaiono in fade-in (niente typewriter). */
+	.skill-panel--fade {
+		animation: skillFadeIn 0.8s ease;
+	}
+	@keyframes skillFadeIn {
+		from { opacity: 0; }
+		to   { opacity: 1; }
+	}
 }

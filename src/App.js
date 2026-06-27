@@ -52,6 +52,7 @@ function App() {
 	const active = SECTION_BY_KEY[activeSection];
 	const Render = active.render; // componente custom della sezione (es. BIO) o null
 	const boxes = active.boxes || { c1: null, c2: null, c3: null };
+	const isFullWidth = !!active.fullWidth;
 
 	// Tiene aggiornata la larghezza per i breakpoint responsive.
 	useEffect(() => {
@@ -99,7 +100,7 @@ function App() {
 	const fadeClass = isFading ? "section-fading" : "";
 
 	return (
-		<div className="App">
+		<div className={`App ${isFullWidth ? "App--full-width" : ""}`}>
 			{/* Barra superiore fissa: hamburger (mobile) + toggle tema */}
 			<div className="topbar">
 			<button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
@@ -152,10 +153,10 @@ function App() {
 				</nav>
 			)}
 
-			<header className="App-header">
+			<header className={`App-header ${isFullWidth ? "App-header--full" : ""}`}>
 
 				{/* Colonna sinistra: avatar (crossfade), nome, bio breve */}
-				<div className="LeftCl">
+				<div className={`LeftCl ${isFullWidth ? "LeftCl--hidden" : ""}`}>
 					<div className="profilePic-wrapper">
 						{AVATARS.map((src) => (
 							<img
@@ -180,9 +181,31 @@ function App() {
 				</div>
 
 				{/* Colonna destra: navbar (desktop/mobile) + contenuto della sezione */}
-				<div className="RightCl">
+				<div className={`RightCl ${isFullWidth ? "RightCl--full" : ""}`}>
 					{!isMobileNav && (
-						<ul className={`sections ${menuOpen ? "open" : ""}`}>{navItems}</ul>
+						<ul className={`sections ${menuOpen ? "open" : ""}`}>
+							{navItems}
+							{isFullWidth && screenWidth >= 1450 && (
+								<li className="nav-theme-toggle">
+									<button
+										className="theme-toggle"
+										onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+										aria-label="Cambia tema"
+									>
+										{theme === "light" ? (
+											<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+												<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+											</svg>
+										) : (
+											<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+												<circle cx="12" cy="12" r="4" />
+												<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+											</svg>
+										)}
+									</button>
+								</li>
+							)}
+						</ul>
 					)}
 
 					{Render ? (

@@ -10,7 +10,16 @@
       "PowerShell(Start-Process \"http://localhost:3000\")",
       "Bash(curl -sf http://localhost:3000)",
       "PowerShell($env:CHOKIDAR_USEPOLLING = \"true\"; Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c cd `\"C:\\\\Users\\\\VG Admin\\\\Desktop\\\\PortfolioWeb-2.2.4\\\\PortfolioWeb-2.2.4\\\\portfolio`\" && set CHOKIDAR_USEPOLLING=true && npm start\" -WindowStyle Normal)",
-      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-Object -Last 30)"
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-Object -Last 30)",
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-String -Pattern \"Compiled|Failed|Error|error\" | Select-Object -First 15)",
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-String -Pattern \"Compiled|Failed|Error\" | Select-Object -First 10)",
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-String -Pattern \"warning|Warning|Line|src\" | Select-Object -First 20)",
+      "PowerShell($env:CI = \"true\"; npm run build 2>&1 | Select-String -Pattern \"Compiled|Failed|Error|warning\" | Select-Object -First 10)",
+      "PowerShell(winget install --id GitHub.cli --accept-source-agreements --accept-package-agreements)",
+      "PowerShell($env:PATH += \";C:\\\\Program Files\\\\GitHub CLI\"; gh auth login --web --git-protocol https)",
+      "PowerShell($env:PATH += \";C:\\\\Program Files\\\\GitHub CLI\"; gh auth status)",
+      "Bash(git -c http.sslBackend=schannel push -u origin main)",
+      "Bash(git config *)"
     ]
   }
 }

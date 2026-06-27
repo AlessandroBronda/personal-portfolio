@@ -10,6 +10,9 @@
 
 # production
 
+# anteprima locale generata da PortfolioUploader — mai committare
+/public/preview/
+
 # misc
 .DS_Store
 .env.local
