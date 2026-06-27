@@ -67,6 +67,49 @@ function App() {
 		localStorage.setItem("theme", theme);
 	}, [theme]);
 
+	// Voci del menu su sfondo scuro → testo bianco (solo mobile, a menu aperto).
+	// La bioSheet (foglio competenze) è scura: le voci che la sovrappongono
+	// sarebbero illeggibili. Calcolo la sovrapposizione reale e la ricalcolo a
+	// ogni scroll (il foglio scorre dietro al menu che è fisso). Il cambio di
+	// colore è animato dalla transition CSS su .glass-shell-nav li.
+	useEffect(() => {
+		if (screenWidth >= 800 || !menuOpen) return;
+		const nav = document.querySelector(".glass-shell-nav");
+		if (!nav) return;
+		const items = Array.from(nav.querySelectorAll("li"));
+		let raf = null;
+
+		const update = () => {
+			raf = null;
+			const sheet = document.querySelector(".bioSheet");
+			const s = sheet ? sheet.getBoundingClientRect() : null;
+			items.forEach((li) => {
+				const r = li.getBoundingClientRect();
+				let onDark = false;
+				if (s) {
+					const hOverlap = Math.min(r.right, s.right) - Math.max(r.left, s.left);
+					const vOverlap = Math.min(r.bottom, s.bottom) - Math.max(r.top, s.top);
+					// Almeno metà voce sopra il foglio → evita sfarfallii sul bordo.
+					onDark = hOverlap > 0 && vOverlap > r.height * 0.5;
+				}
+				li.classList.toggle("on-dark", onDark);
+			});
+		};
+
+		const onScroll = () => {
+			if (raf == null) raf = requestAnimationFrame(update);
+		};
+
+		update();
+		window.addEventListener("scroll", onScroll, { passive: true });
+		window.addEventListener("resize", onScroll);
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			window.removeEventListener("resize", onScroll);
+			if (raf) cancelAnimationFrame(raf);
+		};
+	}, [menuOpen, screenWidth, activeSection]);
+
 	// Cambio sezione con fade-out → swap → fade-in.
 	const handleNavClick = useCallback(
 		(item) => {

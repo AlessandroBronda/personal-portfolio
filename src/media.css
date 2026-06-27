@@ -132,7 +132,7 @@
 	   .LeftCl-text usa display:contents così .Name e .bio diventano
 	   celle dirette della griglia di .LeftCl. */
 	.LeftCl {
-		margin-top: 60px;
+		margin-top: 90px;
 		height: auto;
 		width: 100%;
 		display: grid;
@@ -176,10 +176,6 @@
 		/* L'ombra esterna deve seguire la forma ritagliata: box-shadow verrebbe
 		   tagliata dal clip-path, quindi uso drop-shadow. */
 		filter: drop-shadow(0 6px 22px rgba(31, 38, 135, 0.18));
-		/* Riflessi luminosi sui bordi che toccano lo schermo (alto/sinistra). */
-		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.6),
-			inset 1px 0 0 rgba(255, 255, 255, 0.35);
 		/* CHIUSO: solo la barra (colonna collassata all'altezza della barra). */
 		clip-path: polygon(
 			0 0,
@@ -354,6 +350,20 @@
 		background: rgba(0, 0, 0, 0.1);
 	}
 
+	/* Voci sopra una superficie scura (es. foglio competenze): testo bianco.
+	   La classe .on-dark è aggiunta da App.js in base alla sovrapposizione reale
+	   (ricalcolata allo scroll). Il colore cambia con la transition già definita
+	   su .glass-shell-nav li → effetto animato. Posta dopo hover/active per vincere. */
+	.glass-shell-nav li.on-dark,
+	.glass-shell-nav li.on-dark:hover,
+	.glass-shell-nav li.on-dark.active {
+		color: #fff;
+	}
+
+	.glass-shell-nav li.on-dark.active::before {
+		background: rgba(255, 255, 255, 0.16);
+	}
+
 	.Name {
 		grid-area: name;
 		font-size: 28px;
@@ -402,21 +412,12 @@
 		background-color: rgba(0, 0, 0, 0.178);
 		border-radius: 20px;
 	}
-
-	.bioSheet {
-		width: 90%;
-		height: auto;
-		margin: 10px auto !important; 
-	}
 }
 
 /* ── Tema scuro: override specifici per mobile ── */
 @media (max-width: 800px) {
 	body.dark .glass-shell {
 		background: linear-gradient(135deg, rgba(70, 70, 76, 0.4), rgba(30, 30, 34, 0.16));
-		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.16),
-			inset 1px 0 0 rgba(255, 255, 255, 0.1);
 		filter: drop-shadow(0 6px 22px rgba(0, 0, 0, 0.4));
 	}
 	body.dark .hamburger-bar {
