@@ -128,8 +128,9 @@
    sufficiente a stare SOTTO la topbar fissa (glass-shell-bar = 54px). */
 @media (max-width: 800px) {
   .project-grid-wrapper {
-    margin-top: 66px;
-    max-height: calc(100vh - 84px);
+    /* Quasi a contatto con la topbar (gap minore rispetto a Home/Bio). */
+    margin-top: 60px;
+    max-height: calc(100vh - 78px);
   }
   .project-grid {
     gap: 6px;

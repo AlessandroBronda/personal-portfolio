@@ -130,7 +130,7 @@
 	   .LeftCl-text usa display:contents così .Name e .bio diventano
 	   celle dirette della griglia di .LeftCl. */
 	.LeftCl {
-		margin-top: 90px;
+		margin-top: 10px;
 		height: auto;
 		width: 100%;
 		display: grid;
