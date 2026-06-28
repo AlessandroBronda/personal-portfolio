@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-06-27T21:25:59.128054Z",
+  "generatedAt": "2026-06-27T20:28:18.488273Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -15,42 +15,5 @@
       "label": "Programmazione"
     }
   },
-  "projects": [
-    {
-      "id": "7eb2f273-90ce-4951-85db-4d8e5b60216b",
-      "slug": "1",
-      "category": "3d",
-      "title": "1",
-      "description": "1",
-      "cover": {
-        "src": "images/3d/1/cover.webp",
-        "thumb": "images/3d/1/thumbs/cover.webp",
-        "width": 425,
-        "height": 425
-      },
-      "media": [],
-      "tags": [],
-      "order": 0,
-      "createdAt": "2026-06-27T21:23:55.753633Z",
-      "updatedAt": "2026-06-27T21:23:55.753633Z"
-    },
-    {
-      "id": "b003583a-44fc-4c20-8585-00a412499cc9",
-      "slug": "1",
-      "category": "3d",
-      "title": "1",
-      "description": "1",
-      "cover": {
-        "src": "images/3d/1/cover.webp",
-        "thumb": "images/3d/1/thumbs/cover.webp",
-        "width": 536,
-        "height": 536
-      },
-      "media": [],
-      "tags": [],
-      "order": 0,
-      "createdAt": "2026-06-27T21:25:59.115926Z",
-      "updatedAt": "2026-06-27T21:25:59.115926Z"
-    }
-  ]
+  "projects": []
 }
