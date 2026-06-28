@@ -85,7 +85,7 @@
 /* ── Mobile: codice tutto visibile, nessuna scrollbar ── */
 @media (max-width: 800px) {
 	.bioSheet {
-		width: 94%; /* respiro su entrambi i lati */
+		width: 96%; /* respiro su entrambi i lati */
 		height: auto; /* il foglio cresce per contenere tutto il codice */
 		margin: 10px auto;
 	}

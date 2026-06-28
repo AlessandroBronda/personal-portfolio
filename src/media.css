@@ -125,6 +125,16 @@
 		justify-content: flex-start;
 		gap: 5px;
 	}
+
+	/* Sezioni a tutta larghezza (progetti): la barra è alta 54px e i post devono
+	   stare quasi attaccati. Scoped a .App--full-width, così Home e Bio (NON
+	   full-width) restano esattamente come le hai impostate tu. */
+	.App--full-width {
+		padding-top: 56px; /* barra 54px + ~2px; sovrascrive il 64px del tablet */
+	}
+	.App--full-width .App-header {
+		margin-top: 0; /* niente margine ereditato dal tablet, solo per i progetti */
+	}
 	/* Su mobile: foto e titolo affiancati in alto (riga "pic name"),
 	   bio sotto a tutta larghezza (riga "bio bio").
 	   .LeftCl-text usa display:contents così .Name e .bio diventano

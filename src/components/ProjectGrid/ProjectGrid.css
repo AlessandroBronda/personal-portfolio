@@ -128,9 +128,10 @@
    sufficiente a stare SOTTO la topbar fissa (glass-shell-bar = 54px). */
 @media (max-width: 800px) {
   .project-grid-wrapper {
-    /* Quasi a contatto con la topbar (gap minore rispetto a Home/Bio). */
-    margin-top: 60px;
-    max-height: calc(100vh - 78px);
+    /* Quasi a contatto con la topbar: il gap di ~2px lo dà il padding-top di
+       .App--full-width (56px) sotto la barra da 54px. */
+    margin-top: 0;
+    max-height: calc(100vh - 70px);
   }
   .project-grid {
     gap: 6px;
