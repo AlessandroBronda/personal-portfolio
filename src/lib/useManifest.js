@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 
-// Base URL per la CDN (produzione e staging).
-// NB: le risorse del portfolio (manifest.json + images/) vivono sul branch
-// DEDICATO "assets", gestito esclusivamente da PortfolioUploader. Il sorgente
-// React sta su "main" e non contiene mai questi file: così un push del codice
-// non può intaccare ciò che è stato pubblicato.
+// Le risorse del portfolio (manifest.json + images/) vivono sul branch DEDICATO
+// "assets", gestito solo da PortfolioUploader. Il sorgente React sta su "main" e
+// non contiene mai questi file: un push del codice non può intaccarli.
+//
+// Due sorgenti diverse, per un motivo preciso:
+// - IMMAGINI → CDN jsDelivr: sono immutabili, la cache aggressiva è un vantaggio.
+// - MANIFEST → raw GitHub: cambia a OGNI upload e va letto sempre fresco. jsDelivr
+//   cachea i branch in modo aggressivo e IGNORA i cache-buster (servirebbe stale,
+//   anche dopo il purge), mentre raw.githubusercontent rispetta il cache-buster.
 const CDN_BASE =
   "https://cdn.jsdelivr.net/gh/AlessandroBronda/personal-portfolio@assets";
+const MANIFEST_BASE =
+  "https://raw.githubusercontent.com/AlessandroBronda/personal-portfolio/assets";
 
 // In sviluppo locale con anteprima attiva:
 //   crea .env.development.local e aggiungi:
@@ -29,21 +35,31 @@ const LOCAL_BASE = process.env.REACT_APP_MANIFEST_BASE_URL || "";
 let cachedManifest = null;
 let cachedImageBase = null; // IMAGE_BASE effettivo usato per caricare la cache
 
+// Cache-buster sempre presente: il dev-server e raw.githubusercontent lo
+// rispettano, così ogni caricamento prende il manifest aggiornato.
 function getManifestUrl(base) {
-  if (base === LOCAL_BASE && LOCAL_BASE) {
-    return `${LOCAL_BASE}/manifest.json?_t=${Date.now()}`;
-  }
-  return `${CDN_BASE}/manifest.json`;
+  return `${base}/manifest.json?_t=${Date.now()}`;
 }
 
 async function fetchManifest() {
-  // Prova prima la preview locale (se configurata)
+  // 1. Preview locale (app Python attiva): manifest e immagini da /preview.
   if (LOCAL_BASE) {
     const res = await fetch(getManifestUrl(LOCAL_BASE));
     if (res.ok) return { data: await res.json(), imageBase: LOCAL_BASE };
-    // Preview non disponibile (app Python chiusa) → fallback CDN silenzioso
+    // Preview non disponibile (app chiusa) → prosegue verso la produzione.
   }
-  const res = await fetch(getManifestUrl(CDN_BASE));
+
+  // 2. Produzione: manifest FRESCO da raw GitHub, immagini dalla CDN jsDelivr.
+  try {
+    const res = await fetch(getManifestUrl(MANIFEST_BASE));
+    if (res.ok) return { data: await res.json(), imageBase: CDN_BASE };
+  } catch {
+    // Rete/CORS: cade nel fallback qui sotto.
+  }
+
+  // 3. Fallback difensivo: manifest dalla CDN jsDelivr (può essere un po'
+  //    stale, ma il sito resta funzionante se raw GitHub non risponde).
+  const res = await fetch(`${CDN_BASE}/manifest.json`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return { data: await res.json(), imageBase: CDN_BASE };
 }
