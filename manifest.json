@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-06-28T06:28:48.607333Z",
+  "generatedAt": "2026-06-28T06:33:03.559337Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -16,24 +16,6 @@
     }
   },
   "projects": [
-    {
-      "id": "ee9550f8-b329-4163-9cb1-33e2937808fb",
-      "slug": "1",
-      "category": "3d",
-      "title": "1",
-      "description": "1",
-      "cover": {
-        "src": "images/3d/1/cover.webp",
-        "thumb": "images/3d/1/thumbs/cover.webp",
-        "width": 625,
-        "height": 625
-      },
-      "media": [],
-      "tags": [],
-      "order": 0,
-      "createdAt": "2026-06-28T06:28:48.568317Z",
-      "updatedAt": "2026-06-28T06:28:48.568317Z"
-    },
     {
       "id": "b16e936c-e6fa-44ba-bb03-e849c4028ce3",
       "slug": "2",
