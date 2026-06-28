@@ -42,10 +42,14 @@ function getManifestUrl(base) {
 }
 
 async function fetchManifest() {
-  // 1. Preview locale (app Python attiva): manifest e immagini da /preview.
+  // 1. Preview locale (dev): manifest da /preview (può contenere modifiche non
+  //    ancora pubblicate), ma IMMAGINI dalla CDN jsDelivr. Motivo: l'Uploader
+  //    scrive in public/preview/ solo il manifest, non i file immagine — quindi
+  //    le immagini locali non esisterebbero. Quelle dei progetti già pubblicati
+  //    sono comunque sul CDN, così in locale si vedono correttamente.
   if (LOCAL_BASE) {
     const res = await fetch(getManifestUrl(LOCAL_BASE));
-    if (res.ok) return { data: await res.json(), imageBase: LOCAL_BASE };
+    if (res.ok) return { data: await res.json(), imageBase: CDN_BASE };
     // Preview non disponibile (app chiusa) → prosegue verso la produzione.
   }
 
