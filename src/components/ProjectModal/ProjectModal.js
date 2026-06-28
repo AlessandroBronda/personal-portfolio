@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./ProjectModal.css";
 
 // Converte URL YouTube/Vimeo nel formato embed corrispondente.
@@ -15,15 +15,20 @@ function toEmbedUrl(url) {
 
 function ProjectModal({ project, imageBase = "", onClose }) {
   const overlayRef = useRef(null);
+  // Stato di chiusura: fa partire l'animazione di USCITA (verso sinistra).
+  // Lo smontaggio reale (onClose) avviene solo a fine animazione, gestito
+  // da handleContentAnimEnd sul contenuto.
+  const [closing, setClosing] = useState(false);
+  const startClose = useCallback(() => setClosing(true), []);
 
   // Chiusura con tasto ESC.
   useEffect(() => {
     const handleKey = (e) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") startClose();
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [onClose]);
+  }, [startClose]);
 
   // Focus sull'overlay all'apertura (accessibilità).
   useEffect(() => {
@@ -31,7 +36,12 @@ function ProjectModal({ project, imageBase = "", onClose }) {
   }, []);
 
   const handleOverlayClick = (e) => {
-    if (e.target === overlayRef.current) onClose();
+    if (e.target === overlayRef.current) startClose();
+  };
+
+  // Quando l'animazione del contenuto finisce: se stiamo chiudendo, smonta.
+  const handleContentAnimEnd = () => {
+    if (closing) onClose();
   };
 
   const renderMediaItem = (item, idx) => {
@@ -86,7 +96,7 @@ function ProjectModal({ project, imageBase = "", onClose }) {
 
   return (
     <div
-      className="modal-overlay"
+      className={`modal-overlay ${closing ? "closing" : ""}`}
       ref={overlayRef}
       tabIndex={-1}
       onClick={handleOverlayClick}
@@ -94,8 +104,8 @@ function ProjectModal({ project, imageBase = "", onClose }) {
       aria-modal="true"
       aria-label={project.title}
     >
-      <div className="modal-content">
-        <button className="modal-close" onClick={onClose} aria-label="Chiudi">
+      <div className="modal-content" onAnimationEnd={handleContentAnimEnd}>
+        <button className="modal-close" onClick={startClose} aria-label="Chiudi">
           ✕
         </button>
 

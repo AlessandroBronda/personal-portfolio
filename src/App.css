@@ -296,6 +296,27 @@ body.dark .theme-toggle {
 	color: #f1f1f1;
 }
 
+/* ── Menu dentro la topbar (solo tablet 800–1450px) ──
+   La lista delle sezioni vive nella barra fissa; il toggle resta a destra.
+   Se troppo stretta, scorre in orizzontale (scrollbar nascosta globalmente). */
+.topbar-nav {
+	width: auto;
+	flex: 1 1 auto;
+	min-width: 0;
+	justify-content: flex-start;
+	gap: 20px;
+	margin: 0;
+	padding: 0;
+	overflow-x: auto;
+}
+
+.topbar-nav li {
+	flex-shrink: 0;
+	font-size: 14px;
+	white-space: nowrap;
+	padding-bottom: 2px;
+}
+
 /* ════════════════════════════════════════════════════════════════════
    Tema scuro (attivo con la classe .dark sul <body>)
    Il foglio BIO ha già una sua palette da editor e resta invariato.

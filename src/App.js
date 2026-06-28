@@ -166,10 +166,15 @@ function App() {
 
 	return (
 		<div className={`App ${isFullWidth ? "App--full-width" : ""}`}>
-			{/* Barra superiore (tablet/desktop): solo toggle tema.
-			    Su mobile è sostituita dal guscio in vetro unico qui sotto. */}
+			{/* Barra superiore (tablet/desktop). Sotto i 1450px il menu (lista
+			    sezioni) vive DENTRO la topbar; su desktop ≥1450 il menu è laterale
+			    nella RightCl e la topbar ha solo il toggle. Su mobile (<800) è
+			    sostituita dal guscio in vetro unico qui sotto. */}
 			{screenWidth >= 800 && (
-				<div className="topbar">{themeToggleButton()}</div>
+				<div className="topbar">
+					{isMobileNav && <ul className="sections topbar-nav">{navItems}</ul>}
+					{themeToggleButton()}
+				</div>
 			)}
 
 			{/* ── Mobile: guscio in vetro unico ──
@@ -205,15 +210,6 @@ function App() {
 				className={`nav-scrim ${menuOpen ? "open" : ""}`}
 				onClick={() => setMenuOpen(false)}
 			/>
-
-			{/* Navbar superiore (solo su tablet) */}
-			{isMobileNav && (
-				<nav className={`sections ${menuOpen ? "open" : ""}`}>
-					<div className="navbar">
-						<ul className="sections">{navItems}</ul>
-					</div>
-				</nav>
-			)}
 
 			<header className={`App-header ${isFullWidth ? "App-header--full" : ""}`}>
 

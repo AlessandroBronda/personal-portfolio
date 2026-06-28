@@ -16,14 +16,25 @@
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
-  animation: modalFadeIn 0.2s ease;
+  overflow: hidden; /* clip del contenuto che entra/esce ai lati */
+  animation: modalFadeIn 0.3s ease;
   /* Rimuove il focus-ring visibile sull'overlay */
   outline: none;
+}
+
+/* In chiusura l'overlay sfuma mentre il contenuto scivola via. */
+.modal-overlay.closing {
+  animation: modalFadeOut 0.4s ease forwards;
 }
 
 @keyframes modalFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes modalFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 /* ── Pannello contenuto ── */
@@ -37,12 +48,33 @@
   padding: 32px;
   box-sizing: border-box;
   position: relative;
-  animation: modalSlideIn 0.2s ease;
+  /* ENTRATA: arriva da destra con curva dinamica (leggero overshoot). */
+  animation: modalEnter 0.5s cubic-bezier(0.34, 1.32, 0.46, 1) both;
 }
 
-@keyframes modalSlideIn {
-  from { transform: translateY(16px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+/* USCITA: scivola verso sinistra accelerando. */
+.modal-overlay.closing .modal-content {
+  animation: modalExit 0.4s cubic-bezier(0.55, 0, 0.78, 0.2) forwards;
+}
+
+@keyframes modalEnter {
+  from { transform: translateX(110%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+@keyframes modalExit {
+  from { transform: translateX(0);     opacity: 1; }
+  to   { transform: translateX(-110%); opacity: 0; }
+}
+
+/* Accessibilità: con motion ridotto niente scivolamento, solo dissolvenza. */
+@media (prefers-reduced-motion: reduce) {
+  .modal-content {
+    animation: modalFadeIn 0.2s ease both;
+  }
+  .modal-overlay.closing .modal-content {
+    animation: modalFadeOut 0.2s ease forwards;
+  }
 }
 
 /* ── Pulsante chiudi ── */
