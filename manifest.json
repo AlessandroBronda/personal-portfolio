@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-06-28T06:33:03.559337Z",
+  "generatedAt": "2026-06-28T06:33:20.869865Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -17,6 +17,24 @@
   },
   "projects": [
     {
+      "id": "0d663f01-8f74-4517-adcb-994df6503670",
+      "slug": "3",
+      "category": "3d",
+      "title": "3",
+      "description": "3",
+      "cover": {
+        "src": "images/3d/3/cover.webp",
+        "thumb": "images/3d/3/thumbs/cover.webp",
+        "width": 418,
+        "height": 418
+      },
+      "media": [],
+      "tags": [],
+      "order": 0,
+      "createdAt": "2026-06-28T06:28:48.568317Z",
+      "updatedAt": "2026-06-28T06:28:48.568317Z"
+    },
+    {
       "id": "b16e936c-e6fa-44ba-bb03-e849c4028ce3",
       "slug": "2",
       "category": "3d",
@@ -31,24 +49,6 @@
       "media": [],
       "tags": [],
       "order": 10,
-      "createdAt": "2026-06-28T06:28:48.568317Z",
-      "updatedAt": "2026-06-28T06:28:48.568317Z"
-    },
-    {
-      "id": "0d663f01-8f74-4517-adcb-994df6503670",
-      "slug": "3",
-      "category": "3d",
-      "title": "3",
-      "description": "3",
-      "cover": {
-        "src": "images/3d/3/cover.webp",
-        "thumb": "images/3d/3/thumbs/cover.webp",
-        "width": 418,
-        "height": 418
-      },
-      "media": [],
-      "tags": [],
-      "order": 20,
       "createdAt": "2026-06-28T06:28:48.568317Z",
       "updatedAt": "2026-06-28T06:28:48.568317Z"
     }
