@@ -42,14 +42,13 @@ function getManifestUrl(base) {
 }
 
 async function fetchManifest() {
-  // 1. Preview locale (dev): manifest da /preview (può contenere modifiche non
-  //    ancora pubblicate), ma IMMAGINI dalla CDN jsDelivr. Motivo: l'Uploader
-  //    scrive in public/preview/ solo il manifest, non i file immagine — quindi
-  //    le immagini locali non esisterebbero. Quelle dei progetti già pubblicati
-  //    sono comunque sul CDN, così in locale si vedono correttamente.
+  // 1. Preview locale (dev): manifest e immagini da /preview. L'Uploader
+  //    scrive lì i file dei progetti IN CODA (non ancora pubblicati); le
+  //    immagini dei progetti già pubblicati non ci sono → per quelle i
+  //    componenti fanno fallback alla CDN via onError (vedi fallbackCdn).
   if (LOCAL_BASE) {
     const res = await fetch(getManifestUrl(LOCAL_BASE));
-    if (res.ok) return { data: await res.json(), imageBase: CDN_BASE };
+    if (res.ok) return { data: await res.json(), imageBase: LOCAL_BASE };
     // Preview non disponibile (app chiusa) → prosegue verso la produzione.
   }
 
@@ -113,4 +112,21 @@ export function useManifest() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { manifest, loading, error, imageBase };
+}
+
+/**
+ * Handler `onError` per i tag <img>: se l'immagine locale della preview
+ * non esiste (progetto già pubblicato, file solo sulla CDN), riprova una
+ * sola volta sostituendo la base locale con la CDN.
+ *
+ * In produzione imageBase È già la CDN: il retry non scatta (guardia).
+ */
+export function fallbackCdn(event) {
+  const img = event.target;
+  if (img.dataset.cdnRetry) return;        // già riprovato: stop
+  const src = img.getAttribute("src") || "";
+  const idx = src.indexOf("/images/");
+  if (idx === -1 || src.startsWith(CDN_BASE)) return;
+  img.dataset.cdnRetry = "1";
+  img.src = `${CDN_BASE}${src.slice(idx)}`;
 }

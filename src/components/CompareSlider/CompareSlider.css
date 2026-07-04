@@ -1,0 +1,72 @@
+/* ════════════════════════════════════════════════════════════════════
+   CompareSlider — confronto due immagini con barra divisoria trascinabile
+   (es. Beauty render vs Topologia). Usato dentro ProjectModal.
+   ════════════════════════════════════════════════════════════════════ */
+
+.compare-box {
+  position: relative;
+  width: 100%;
+  /* Nel flusso continuo del post le immagini non hanno angoli stondati */
+  border-radius: 0;
+  overflow: hidden;
+  cursor: ew-resize;
+  touch-action: none;   /* il drag orizzontale non scrolla la pagina */
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+}
+
+.compare-box:focus-visible {
+  box-shadow: 0 0 0 2px #4a90d9;
+}
+
+.compare-img {
+  width: 100%;
+  display: block;
+  pointer-events: none;   /* il drag è gestito dal contenitore */
+}
+
+/* L'immagine di confronto sta sopra, ritagliata alla posizione della barra */
+.compare-img--overlay {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Barra divisoria ── */
+.compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateX(-1px);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.compare-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1c1c1e;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 800px) {
+  .compare-handle {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+}

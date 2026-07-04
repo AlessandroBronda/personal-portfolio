@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./ProjectModal.css";
+import CompareSlider from "../CompareSlider/CompareSlider";
+import { fallbackCdn } from "../../lib/useManifest";
+import { softwareIconUrl, softwareLabel } from "../../lib/software";
 
 // Converte URL YouTube/Vimeo nel formato embed corrispondente.
 function toEmbedUrl(url) {
@@ -46,6 +49,23 @@ function ProjectModal({ project, imageBase = "", onClose }) {
 
   const renderMediaItem = (item, idx) => {
     if (item.type === "image") {
+      // Coppia di confronto (es. Beauty vs Topologia): slider con barra
+      // divisoria. Un manifest senza compareSrc mostra l'immagine normale.
+      // Nota: le didascalie delle immagini restano nel manifest (servono
+      // lato backend) ma NON vengono mostrate — le immagini scorrono come
+      // un flusso continuo, stile Behance.
+      if (item.compareSrc) {
+        return (
+          <div key={idx} className="modal-media-item">
+            <CompareSlider
+              baseSrc={`${imageBase}/${item.src}`}
+              overlaySrc={`${imageBase}/${item.compareSrc}`}
+              alt={item.caption || project.title}
+              onImgError={fallbackCdn}
+            />
+          </div>
+        );
+      }
       return (
         <div key={idx} className="modal-media-item">
           <img
@@ -53,8 +73,8 @@ function ProjectModal({ project, imageBase = "", onClose }) {
             alt={item.caption || project.title}
             loading="lazy"
             className="modal-image"
+            onError={fallbackCdn}
           />
-          {item.caption && <p className="modal-caption">{item.caption}</p>}
         </div>
       );
     }
@@ -128,7 +148,40 @@ function ProjectModal({ project, imageBase = "", onClose }) {
         <div className="modal-media-list">
           {project.media?.map(renderMediaItem)}
         </div>
+
+        {/* Footer software (solo mobile): loghi centrati in fondo al post */}
+        {project.software?.length > 0 && (
+          <div className="modal-software">
+            {project.software.map((id) => (
+              <img
+                key={id}
+                src={softwareIconUrl(id)}
+                alt={softwareLabel(id)}
+                title={softwareLabel(id)}
+                className="modal-software-icon"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Rail software (solo desktop): fissa a destra, stile Behance —
+          resta ferma mentre il contenuto del post scorre */}
+      {project.software?.length > 0 && (
+        <div className="modal-software-rail">
+          {project.software.map((id) => (
+            <img
+              key={id}
+              src={softwareIconUrl(id)}
+              alt={softwareLabel(id)}
+              title={softwareLabel(id)}
+              className="modal-software-icon"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

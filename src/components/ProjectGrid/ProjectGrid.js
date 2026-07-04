@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ProjectGrid.css";
-import { useManifest } from "../../lib/useManifest";
+import { useManifest, fallbackCdn } from "../../lib/useManifest";
 import ProjectModal from "../ProjectModal/ProjectModal";
 
 function ProjectGrid({ category, isFading }) {
@@ -35,6 +35,7 @@ function ProjectGrid({ category, isFading }) {
                 alt={project.title}
                 loading="eager"
                 className="grid-cover"
+                onError={fallbackCdn}
               />
               <div className="grid-overlay">
                 <span className="grid-title">{project.title}</span>
