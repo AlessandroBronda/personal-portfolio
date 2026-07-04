@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-07-04T14:52:12.214982Z",
+  "generatedAt": "2026-07-04T15:05:40.764325Z",
   "categories": {
     "3d": {
       "label": "Progetti 3D"
@@ -15,111 +15,5 @@
       "label": "Programmazione"
     }
   },
-  "projects": [
-    {
-      "id": "6c245597-2480-4396-abfe-c0171a997c25",
-      "slug": "prova-di-visualizzazione-e-di-push",
-      "category": "3d",
-      "title": "Prova di visualizzazione e di push",
-      "description": "In questa prova vediamo se l'applicazione risponde bene a caricamenti e modifiche e se il lato react Funziona bene",
-      "cover": {
-        "src": "images/3d/prova-di-visualizzazione-e-di-push/cover.webp",
-        "thumb": "images/3d/prova-di-visualizzazione-e-di-push/thumbs/cover.webp",
-        "width": 1884,
-        "height": 1884
-      },
-      "media": [
-        {
-          "kind": "final",
-          "type": "image",
-          "caption": "Prova",
-          "src": "images/3d/prova-di-visualizzazione-e-di-push/01-chestnft.webp",
-          "thumb": "images/3d/prova-di-visualizzazione-e-di-push/thumbs/01-chestnft.webp",
-          "width": 1884,
-          "height": 1884,
-          "compareSrc": "images/3d/prova-di-visualizzazione-e-di-push/01-chestnft-confronto.webp",
-          "compareThumb": "images/3d/prova-di-visualizzazione-e-di-push/thumbs/01-chestnft-confronto.webp",
-          "provider": null,
-          "url": null
-        }
-      ],
-      "tags": [],
-      "software": [
-        "zbrush",
-        "cinema4d",
-        "photoshop"
-      ],
-      "order": 0,
-      "createdAt": "2026-07-04T14:52:12.144527Z",
-      "updatedAt": "2026-07-04T14:52:12.144527Z"
-    },
-    {
-      "id": "b16e936c-e6fa-44ba-bb03-e849c4028ce3",
-      "slug": "2",
-      "category": "3d",
-      "title": "2",
-      "description": "2",
-      "cover": {
-        "src": "images/3d/2/cover.webp",
-        "thumb": "images/3d/2/thumbs/cover.webp",
-        "width": 612,
-        "height": 612
-      },
-      "media": [],
-      "tags": [],
-      "software": [],
-      "order": 10,
-      "createdAt": "2026-06-28T06:28:48.568317Z",
-      "updatedAt": "2026-06-28T06:28:48.568317Z"
-    },
-    {
-      "id": "9aac4754-5494-465d-bc65-5a5023236b4e",
-      "slug": "un-altra-prova-per-vedere-se-tutto-funziona",
-      "category": "3d",
-      "title": "Un altra prova per vedere se tutto funziona",
-      "description": "Ancora un altra prova",
-      "cover": {
-        "src": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/cover.webp",
-        "thumb": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/thumbs/cover.webp",
-        "width": 625,
-        "height": 625
-      },
-      "media": [
-        {
-          "kind": "final",
-          "type": "image",
-          "caption": "",
-          "src": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/01-73681c89a076bbebdb890c02c2a4eb0d.webp",
-          "thumb": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/thumbs/01-73681c89a076bbebdb890c02c2a4eb0d.webp",
-          "width": 720,
-          "height": 960,
-          "compareSrc": null,
-          "compareThumb": null,
-          "provider": null,
-          "url": null
-        },
-        {
-          "kind": "final",
-          "type": "image",
-          "caption": "",
-          "src": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/02-065866885b77c221faddb7ed20d9ca70.webp",
-          "thumb": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/thumbs/02-065866885b77c221faddb7ed20d9ca70.webp",
-          "width": 736,
-          "height": 1041,
-          "compareSrc": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/02-065866885b77c221faddb7ed20d9ca70-confronto.webp",
-          "compareThumb": "images/3d/un-altra-prova-per-vedere-se-tutto-funziona/thumbs/02-065866885b77c221faddb7ed20d9ca70-confronto.webp",
-          "provider": null,
-          "url": null
-        }
-      ],
-      "tags": [],
-      "software": [
-        "cinema4d",
-        "photoshop"
-      ],
-      "order": 20,
-      "createdAt": "2026-07-04T14:52:12.144527Z",
-      "updatedAt": "2026-07-04T14:52:12.144527Z"
-    }
-  ]
+  "projects": []
 }
