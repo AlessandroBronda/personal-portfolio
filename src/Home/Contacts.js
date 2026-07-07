@@ -38,8 +38,18 @@ const CONTACTS = [
 		value: "alessandrobronda@gmail.com",
 		href: "mailto:alessandrobronda@gmail.com",
 	},
-	{ id: "behance",    label: "Behance",    placeholder: "behance.net/username" },
-	{ id: "artstation", label: "ArtStation", placeholder: "artstation.com/username" },
+	{
+		id: "behance",
+		label: "Behance",
+		value: "behance/alessandrobronda",
+		href: "https://www.behance.net/alessandro5b27",
+	},
+	{
+		id: "artstation",
+		label: "ArtStation",
+		value: "artstation/alessandrobronda",
+		href: "https://www.artstation.com/alessandrobronda",
+	},
 	{ id: "linkedin",   label: "LinkedIn",   placeholder: "/in/username" },
 ];
 
@@ -49,19 +59,28 @@ function Contacts() {
 			<h2 className="contacts-title">Contatti</h2>
 
 			<ul className="contacts-list">
-				{CONTACTS.map(({ id, label, value, placeholder, href }) => (
+				{CONTACTS.map(({ id, label, value, placeholder, href }) => {
+					// I link a profili esterni (http) si aprono in una nuova scheda.
+					const esterno = typeof href === "string" && href.startsWith("http");
+					return (
 					<li className="contact-item" key={id}>
 						<span className="contact-icon">{ICONS[id]}</span>
 						<span className="contact-text">
 							<span className="contact-label">{label}</span>
 							{/* POPOLA QUI Behance/ArtStation/LinkedIn: sostituisci href e testo */}
 							{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-							<a className="contact-value" href={href || "#"}>
+							<a
+								className="contact-value"
+								href={href || "#"}
+								target={esterno ? "_blank" : undefined}
+								rel={esterno ? "noopener noreferrer" : undefined}
+							>
 								{value || placeholder}
 							</a>
 						</span>
 					</li>
-				))}
+					);
+				})}
 			</ul>
 		</div>
 	);

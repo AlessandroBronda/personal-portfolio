@@ -139,6 +139,10 @@
 	list-style-type: none;
 	display: flex;
 	flex-direction: row;
+	/* Voci centrate verticalmente: senza questo, quando la ul si allunga
+	   (full-width, align-items:stretch della RightCl) le li si stirano e
+	   l'underline si stacca in fondo, lontano dal testo. */
+	align-items: center;
 	gap: 30px;
 	padding: 0px;
 	margin: 0px;
@@ -149,7 +153,10 @@
 }
 
 .sections li {
-	padding-bottom: 0px;
+	/* line-height compatto + piccolo padding: l'underline resta vicino al
+	   testo con un gap lieve, senza lo spazio del line-box ereditato. */
+	line-height: 1;
+	padding-bottom: 3px;
 	transition: all 0.5s;
 	border-bottom: 2px solid transparent;
 	text-align: center;
@@ -314,7 +321,6 @@ body.dark .theme-toggle {
 	flex-shrink: 0;
 	font-size: 14px;
 	white-space: nowrap;
-	padding-bottom: 2px;
 }
 
 /* ════════════════════════════════════════════════════════════════════
