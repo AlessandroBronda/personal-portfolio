@@ -1,22 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import "./ProjectModal.css";
 import CompareSlider from "../CompareSlider/CompareSlider";
-import { fallbackCdn } from "../../lib/useManifest";
+import { imageProps } from "../../lib/content";
+import { embedUrl } from "../../lib/video";
 import { softwareIconUrl, softwareLabel } from "../../lib/software";
 
-// Converte URL YouTube/Vimeo nel formato embed corrispondente.
-function toEmbedUrl(url) {
-  if (!url) return null;
-  const ytWatch = url.match(/youtube\.com\/watch\?v=([\w-]+)/);
-  if (ytWatch) return `https://www.youtube.com/embed/${ytWatch[1]}`;
-  const ytShort = url.match(/youtu\.be\/([\w-]+)/);
-  if (ytShort) return `https://www.youtube.com/embed/${ytShort[1]}`;
-  const vimeo = url.match(/vimeo\.com\/(\d+)/);
-  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
-  return null;
-}
+// Larghezza a schermo delle immagini del post: il riquadro è largo al
+// massimo 800 px meno 32 px di margine per lato (vedi ProjectModal.css).
+const MEDIA_SIZES = "(max-width: 800px) 100vw, 736px";
 
-function ProjectModal({ project, imageBase = "", onClose }) {
+function ProjectModal({ project, onClose }) {
   const overlayRef = useRef(null);
   // Stato di chiusura: fa partire l'animazione di USCITA (verso sinistra).
   // Lo smontaggio reale (onClose) avviene solo a fine animazione, gestito
@@ -49,47 +42,47 @@ function ProjectModal({ project, imageBase = "", onClose }) {
 
   const renderMediaItem = (item, idx) => {
     if (item.type === "image") {
+      // Le didascalie delle immagini restano nel gestionale ma NON vengono
+      // mostrate: le immagini scorrono come un flusso continuo, stile Behance.
+      const alt = item.image.alt || item.caption || project.title;
       // Coppia di confronto (es. Beauty vs Topologia): slider con barra
-      // divisoria. Un manifest senza compareSrc mostra l'immagine normale.
-      // Nota: le didascalie delle immagini restano nel manifest (servono
-      // lato backend) ma NON vengono mostrate — le immagini scorrono come
-      // un flusso continuo, stile Behance.
-      if (item.compareSrc) {
+      // divisoria. Senza `compare` si vede l'immagine normale.
+      if (item.compare) {
         return (
-          <div key={idx} className="modal-media-item">
+          <div key={item.id || idx} className="modal-media-item">
             <CompareSlider
-              baseSrc={`${imageBase}/${item.src}`}
-              overlaySrc={`${imageBase}/${item.compareSrc}`}
-              alt={item.caption || project.title}
-              onImgError={fallbackCdn}
+              base={imageProps(item.image, MEDIA_SIZES)}
+              overlay={imageProps(item.compare, MEDIA_SIZES)}
+              alt={alt}
             />
           </div>
         );
       }
       return (
-        <div key={idx} className="modal-media-item">
+        <div key={item.id || idx} className="modal-media-item">
           <img
-            src={`${imageBase}/${item.src}`}
-            alt={item.caption || project.title}
-            loading="lazy"
+            {...imageProps(item.image, MEDIA_SIZES)}
+            alt={alt}
+            loading={idx < 2 ? "eager" : "lazy"}
+            decoding="async"
             className="modal-image"
-            onError={fallbackCdn}
           />
         </div>
       );
     }
 
     if (item.type === "video") {
-      const embedUrl = toEmbedUrl(item.url);
-      if (embedUrl) {
+      const src = embedUrl(item.url);
+      if (src) {
         return (
-          <div key={idx} className="modal-media-item">
+          <div key={item.id || idx} className="modal-media-item">
             <div className="modal-video-embed">
               <iframe
-                src={embedUrl}
+                src={src}
                 title={item.caption || `Video ${idx + 1}`}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                 allowFullScreen
               />
             </div>
@@ -101,7 +94,7 @@ function ProjectModal({ project, imageBase = "", onClose }) {
 
     // type "link" o video con URL non riconoscibile come embed
     return (
-      <div key={idx} className="modal-media-item modal-media-link">
+      <div key={item.id || idx} className="modal-media-item modal-media-link">
         <a
           href={item.url}
           target="_blank"

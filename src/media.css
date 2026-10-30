@@ -304,13 +304,20 @@
 		list-style: none;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		/* Voci centrate in verticale; se le sezioni sono tante da non starci,
+		   la colonna scorre (i margini auto centrano senza tagliare la cima). */
+		justify-content: flex-start;
+		overflow-y: auto;
 		gap: 10px;
 		color: rgb(55, 55, 55);
 		opacity: 0;
 		pointer-events: none;
 		transition: opacity 0.3s ease;
 	}
+
+	.glass-shell-nav li { flex-shrink: 0; } /* mai schiacciate: piuttosto si scorre */
+	.glass-shell-nav li:first-child { margin-top: auto; }
+	.glass-shell-nav li:last-child { margin-bottom: auto; }
 
 	.glass-shell-nav.open {
 		opacity: 1;
@@ -348,6 +355,11 @@
 	.glass-shell-nav.open li:nth-child(5) { transition-delay: 0.30s; }
 	.glass-shell-nav.open li:nth-child(6) { transition-delay: 0.35s; }
 	.glass-shell-nav.open li:nth-child(7) { transition-delay: 0.40s; }
+	/* Le sezioni del gestionale possono essere di più: la cascata continua. */
+	.glass-shell-nav.open li:nth-child(8) { transition-delay: 0.45s; }
+	.glass-shell-nav.open li:nth-child(9) { transition-delay: 0.50s; }
+	.glass-shell-nav.open li:nth-child(10) { transition-delay: 0.55s; }
+	.glass-shell-nav.open li:nth-child(n+11) { transition-delay: 0.60s; }
 
 	.glass-shell-nav li.clicked {
 		animation: navClickBounce 0.5s;

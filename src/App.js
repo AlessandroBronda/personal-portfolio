@@ -1,38 +1,55 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./App.css";
 import "./media.css";
+import ProjectGrid from "./components/ProjectGrid/ProjectGrid";
+import { useContent, imageProps } from "./lib/content";
 
-// ── Registro delle sezioni ───────────────────────────────────────────────
-// Ogni voce della navbar è un modulo in una sua cartella che esporta `section`.
-// L'ordine di questo array determina l'ordine della navbar.
+// ── Sezioni ──────────────────────────────────────────────────────────────
+// HOME e BIO sono moduli nel codice (cartelle Home/ e Bio/) e restano
+// sempre le prime due voci. Tutte le altre sezioni arrivano da content.json
+// sul bucket, nell'ordine e con i nomi scelti nel gestionale: si
+// aggiungono, rinominano, nascondono e riordinano senza deploy.
 import { section as home } from "./Home/Home";
 import { section as bio } from "./Bio/Bio";
-import { section as progetti3d } from "./Progetti3D/Progetti3D";
-import { section as animazione } from "./Animazione/Animazione";
-import { section as grafica } from "./Grafica/Grafica";
-import { section as programmazione } from "./Programmazione/Programmazione";
-import { section as webDesign } from "./WebDesign/WebDesign";
 
-const SECTIONS = [
-	home,
-	bio,
-	progetti3d,
-	animazione,
-	grafica,
-	programmazione,
-	webDesign,
-];
+const FIXED_SECTIONS = [home, bio];
 
-const SECTION_BY_KEY = Object.fromEntries(SECTIONS.map((s) => [s.key, s]));
-const NAV_ITEMS = SECTIONS.map((s) => s.key);
-// Avatar unici: una sola immagine per layer, crossfade gestito via opacity.
-const AVATARS = [...new Set(SECTIONS.map((s) => s.avatar))];
+// Immagine della colonna sinistra per le sezioni senza un'immagine propria.
+const DEFAULT_AVATAR = process.env.PUBLIC_URL + "/semoy.jpg";
+// Il ritratto è un cerchio di 350 px (più piccolo su mobile).
+const AVATAR_SIZES = "350px";
+
+// Avatar come attributi di <img>: le sezioni fisse hanno un file in
+// public/, quelle del gestionale un'immagine sul bucket in più larghezze.
+const avatarOf = (a) => (typeof a === "string" ? { src: a } : a);
+
+/**
+ * Sezione del gestionale → stessa forma delle sezioni nel codice.
+ * Di norma la griglia è a tutta larghezza (colonna sinistra nascosta);
+ * se nel gestionale le dai un'immagine o un testo, la colonna sinistra
+ * resta visibile e li mostra.
+ */
+function fromContent(s) {
+	const intro = s.intro || {};
+	const hasLeftColumn = Boolean(s.avatar || intro.name || intro.bio);
+	return {
+		key: s.id,
+		label: s.label,
+		avatar: s.avatar ? imageProps(s.avatar, AVATAR_SIZES) : DEFAULT_AVATAR,
+		projects: s.projects,
+		name: intro.name,
+		bio: intro.bio,
+		bioItalic: Boolean(intro.italic),
+		fullWidth: !hasLeftColumn,
+	};
+}
 
 // Durata (ms) del fade-out del contenuto prima di cambiare sezione.
 const FADE_MS = 300;
 
 // Testi di default della colonna sinistra (una sezione può sovrascriverli
-// con i campi `name` / `bio` / `bioItalic` nel suo config).
+// con i campi `name` / `bio` / `bioItalic`: nel codice per HOME e BIO,
+// dal gestionale per le altre).
 const DEFAULT_NAME = "Alessandro Bronda";
 const DEFAULT_BIO =
 	"Ciao, sono un freelance e mi occupo di 3D, grafica e programmazione. Mi piace " +
@@ -49,7 +66,25 @@ function App() {
 
 	const isMobileNav = screenWidth >= 800 && screenWidth < 1450;
 
-	const active = SECTION_BY_KEY[activeSection];
+	// Finché content.json non arriva (o se il bucket non risponde) il menu
+	// ha solo HOME e BIO.
+	const content = useContent();
+	const sections = useMemo(
+		() => [...FIXED_SECTIONS, ...(content?.sections ?? []).map(fromContent)],
+		[content]
+	);
+	// Avatar unici: una sola immagine per layer, crossfade gestito via opacity.
+	const avatars = useMemo(() => {
+		const bySrc = new Map();
+		sections.forEach((s) => {
+			const a = avatarOf(s.avatar);
+			if (!bySrc.has(a.src)) bySrc.set(a.src, a);
+		});
+		return [...bySrc.values()];
+	}, [sections]);
+
+	const active = sections.find((s) => s.key === activeSection) || home;
+	const activeAvatar = avatarOf(active.avatar).src;
 	const Render = active.render; // componente custom della sezione (es. BIO) o null
 	const boxes = active.boxes || { c1: null, c2: null, c3: null };
 	const isFullWidth = !!active.fullWidth;
@@ -103,12 +138,15 @@ function App() {
 		update();
 		window.addEventListener("scroll", onScroll, { passive: true });
 		window.addEventListener("resize", onScroll);
+		// Con molte sezioni la colonna del menu scorre da sola.
+		nav.addEventListener("scroll", onScroll, { passive: true });
 		return () => {
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onScroll);
+			nav.removeEventListener("scroll", onScroll);
 			if (raf) cancelAnimationFrame(raf);
 		};
-	}, [menuOpen, screenWidth, activeSection]);
+	}, [menuOpen, screenWidth, activeSection, sections]);
 
 	// Cambio sezione con fade-out → swap → fade-in.
 	const handleNavClick = useCallback(
@@ -124,19 +162,19 @@ function App() {
 		[activeSection]
 	);
 
-	const navItems = NAV_ITEMS.map((item) => (
+	const navItems = sections.map(({ key, label }) => (
 		<li
-			key={item}
-			className={`${activeSection === item ? "active" : ""} ${
-				clickedItem === item ? "clicked" : ""
+			key={key}
+			className={`${activeSection === key ? "active" : ""} ${
+				clickedItem === key ? "clicked" : ""
 			}`}
 			onClick={() => {
-				setClickedItem(item);
-				handleNavClick(item);
+				setClickedItem(key);
+				handleNavClick(key);
 			}}
 			onAnimationEnd={() => setClickedItem(null)}
 		>
-			{item}
+			{label}
 		</li>
 	));
 
@@ -216,11 +254,11 @@ function App() {
 				{/* Colonna sinistra: avatar (crossfade), nome, bio breve */}
 				<div className={`LeftCl ${isFullWidth ? "LeftCl--hidden" : ""}`}>
 					<div className="profilePic-wrapper">
-						{AVATARS.map((src) => (
+						{avatars.map(({ width, height, ...img }) => (
 							<img
-								key={src}
-								className={`pic-layer ${active.avatar === src ? "" : "hidden"}`}
-								src={src}
+								key={img.src}
+								{...img}
+								className={`pic-layer ${activeAvatar === img.src ? "" : "hidden"}`}
 								alt="Alessandro Bronda"
 							/>
 						))}
@@ -252,8 +290,12 @@ function App() {
 					{Render ? (
 						// Sezione con render personalizzato (es. BIO)
 						<Render screenWidth={screenWidth} isFading={isFading} />
+					) : active.projects ? (
+						// Sezione del gestionale: griglia dei lavori. La key la
+						// rimonta a ogni cambio sezione (comparsa a cascata, scheda chiusa).
+						<ProjectGrid key={active.key} projects={active.projects} isFading={isFading} />
 					) : (
-						// Layout a tre box (HOME e sezioni non ancora implementate)
+						// Layout a tre box (HOME)
 						<>
 							<div className={`cMaster ${fadeClass}`}>
 								<div className="c1">{boxes.c1}</div>
@@ -269,7 +311,7 @@ function App() {
 			</header>
 
 			{/* c3 a tutta larghezza sotto l'header (solo su tablet, layout a box) */}
-			{!Render && screenWidth >= 800 && screenWidth <= 1450 && (
+			{!Render && !active.projects && screenWidth >= 800 && screenWidth <= 1450 && (
 				<div className={`c3 ${fadeClass}`}>{boxes.c3}</div>
 			)}
 		</div>

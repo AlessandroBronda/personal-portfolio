@@ -1,25 +1,24 @@
 import React, { useState } from "react";
 import "./ProjectGrid.css";
-import { useManifest, fallbackCdn } from "../../lib/useManifest";
+import { imageProps } from "../../lib/content";
 import ProjectModal from "../ProjectModal/ProjectModal";
 
-function ProjectGrid({ category, isFading }) {
-  const { manifest, loading, error, imageBase } = useManifest();
-  const [selectedProject, setSelectedProject] = useState(null);
+// Larghezza a schermo di una copertina: 3 colonne in una griglia larga al
+// massimo 1040 px (vedi ProjectGrid.css).
+const COVER_SIZES = "(max-width: 1064px) 33vw, 340px";
 
-  const projects =
-    manifest?.projects?.filter((p) => p.category === category) ?? [];
+// Le prime righe arrivano subito, le altre quando si scorre la griglia.
+const EAGER = 9;
+
+// Griglia dei lavori di una sezione (dati da content.json, già in ordine).
+function ProjectGrid({ projects, isFading }) {
+  const [selectedProject, setSelectedProject] = useState(null);
 
   return (
     <div className={`project-grid-wrapper ${isFading ? "section-fading" : ""}`}>
-      {loading && <p className="grid-state">Caricamento...</p>}
-      {error && (
-        <p className="grid-state">Errore nel caricamento dei progetti.</p>
-      )}
-      {!loading && !error && projects.length === 0 && (
-        <p className="grid-state">Nessun progetto disponibile.</p>
-      )}
-      {!loading && !error && projects.length > 0 && (
+      {projects.length === 0 ? (
+        <p className="grid-state">Contenuti in arrivo.</p>
+      ) : (
         <div className="project-grid">
           {projects.map((project, i) => (
             <button
@@ -31,11 +30,11 @@ function ProjectGrid({ category, isFading }) {
               aria-label={project.title}
             >
               <img
-                src={`${imageBase}/${project.cover.thumb || project.cover.src}`}
-                alt={project.title}
-                loading="eager"
+                {...imageProps(project.cover, COVER_SIZES)}
+                alt={project.cover.alt || project.title}
+                loading={i < EAGER ? "eager" : "lazy"}
+                decoding="async"
                 className="grid-cover"
-                onError={fallbackCdn}
               />
               <div className="grid-overlay">
                 <span className="grid-title">{project.title}</span>
@@ -47,7 +46,6 @@ function ProjectGrid({ category, isFading }) {
       {selectedProject && (
         <ProjectModal
           project={selectedProject}
-          imageBase={imageBase}
           onClose={() => setSelectedProject(null)}
         />
       )}
