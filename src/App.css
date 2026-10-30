@@ -152,6 +152,16 @@
 	width: 100%;
 }
 
+/* Menu nella colonna destra (desktop ≥1450): le sezioni arrivano dal
+   gestionale e possono essere tante. Se non stanno su una riga il menu va a
+   capo, invece di uscire dallo schermo. (Tablet: la barra in alto scorre in
+   orizzontale; mobile: colonna nel guscio in vetro.) */
+.RightCl > .sections {
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	row-gap: 14px;
+}
+
 .sections li {
 	/* line-height compatto + piccolo padding: l'underline resta vicino al
 	   testo con un gap lieve, senza lo spazio del line-box ereditato. */

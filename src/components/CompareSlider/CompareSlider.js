@@ -4,12 +4,13 @@ import "./CompareSlider.css";
 /**
  * Confronto tra due immagini con barra divisoria trascinabile.
  *
- * Le due immagini hanno le stesse dimensioni (garantito dall'Uploader):
+ * Le due immagini hanno le stesse proporzioni (il gestionale avvisa se no):
  * quella sopra (overlay, es. topologia) viene ritagliata con clip-path
  * alla posizione della barra; trascinando (mouse o touch) si rivela
  * l'una o l'altra. Accessibile anche da tastiera (frecce ←/→).
  */
-function CompareSlider({ baseSrc, overlaySrc, alt, onImgError }) {
+// base / overlay: attributi <img> (src, srcSet, sizes, width, height) da imageProps().
+function CompareSlider({ base, overlay, alt }) {
   const boxRef = useRef(null);
   const trascinando = useRef(false);
   const [pos, setPos] = useState(50); // posizione barra in % (0..100)
@@ -55,19 +56,19 @@ function CompareSlider({ baseSrc, overlaySrc, alt, onImgError }) {
       tabIndex={0}
     >
       <img
-        src={baseSrc}
+        {...base}
         alt={alt}
         className="compare-img"
+        decoding="async"
         draggable={false}
-        onError={onImgError}
       />
       <img
-        src={overlaySrc}
+        {...overlay}
         alt={`${alt} (confronto)`}
         className="compare-img compare-img--overlay"
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+        decoding="async"
         draggable={false}
-        onError={onImgError}
       />
       <div className="compare-divider" style={{ left: `${pos}%` }}>
         <div className="compare-handle" aria-hidden="true">⇄</div>
