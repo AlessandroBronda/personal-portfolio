@@ -3,7 +3,7 @@ import "./ProjectModal.css";
 import CompareSlider from "../CompareSlider/CompareSlider";
 import { imageProps } from "../../lib/content";
 import { embedUrl } from "../../lib/video";
-import { softwareIconUrl, softwareLabel } from "../../lib/software";
+import { softwareLabel, softwareMono } from "../../lib/software";
 
 // Larghezza a schermo delle immagini del post: il riquadro è largo al
 // massimo 800 px meno 32 px di margine per lato (vedi ProjectModal.css).
@@ -142,38 +142,32 @@ function ProjectModal({ project, onClose }) {
           {project.media?.map(renderMediaItem)}
         </div>
 
-        {/* Footer software (solo mobile): loghi centrati in fondo al post */}
+        {/* Footer software (telefono e tablet): pillole in vetro con sigla e
+            nome, centrate in fondo al post */}
         {project.software?.length > 0 && (
-          <div className="modal-software">
+          <ul className="modal-software" aria-label="Software utilizzati">
             {project.software.map((id) => (
-              <img
-                key={id}
-                src={softwareIconUrl(id)}
-                alt={softwareLabel(id)}
-                title={softwareLabel(id)}
-                className="modal-software-icon"
-                loading="lazy"
-              />
+              <li key={id} className="sw-pill">
+                <span className="sw-chip" aria-hidden="true">{softwareMono(id)}</span>
+                <span className="sw-name">{softwareLabel(id)}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
 
-      {/* Rail software (solo desktop): fissa a destra, stile Behance —
-          resta ferma mentre il contenuto del post scorre */}
+      {/* Rail software (desktop): tessere in vetro fisse a destra, stile
+          Behance — restano ferme mentre il post scorre. Il nome compare
+          passando sopra con il mouse. */}
       {project.software?.length > 0 && (
-        <div className="modal-software-rail">
+        <ul className="modal-software-rail" aria-label="Software utilizzati">
           {project.software.map((id) => (
-            <img
-              key={id}
-              src={softwareIconUrl(id)}
-              alt={softwareLabel(id)}
-              title={softwareLabel(id)}
-              className="modal-software-icon"
-              loading="lazy"
-            />
+            <li key={id} className="sw-chip sw-chip--rail" aria-label={softwareLabel(id)}>
+              <span aria-hidden="true">{softwareMono(id)}</span>
+              <span className="sw-tip" aria-hidden="true">{softwareLabel(id)}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

@@ -5,7 +5,7 @@
 import "./Home.css";
 import Contacts from "./Contacts";
 
-const avatar = process.env.PUBLIC_URL + "/semoy.jpg";
+const avatar = process.env.PUBLIC_URL + "/semoy.webp";
 
 export const section = {
 	key: "HOME",
