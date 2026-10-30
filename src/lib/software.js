@@ -1,29 +1,33 @@
-// Etichette leggibili dei software (id → nome), allineate a core/software.py
-// dell'Uploader. I loghi vivono in public/software/<id>.svg — per cambiarne
-// uno basta sostituire il file SVG, senza toccare il codice.
-export const SOFTWARE_LABELS = {
-  zbrush: "ZBrush",
-  blender: "Blender",
-  cinema4d: "Cinema 4D",
-  maya: "Maya",
-  "3dsmax": "3ds Max",
-  substance: "Substance Painter",
-  marvelous: "Marvelous Designer",
-  keyshot: "KeyShot",
-  unreal: "Unreal Engine",
-  unity: "Unity",
-  photoshop: "Photoshop",
-  illustrator: "Illustrator",
-  aftereffects: "After Effects",
-  premiere: "Premiere Pro",
-  davinci: "DaVinci Resolve",
-  figma: "Figma",
+// Software utilizzati in un lavoro: id (gli stessi del gestionale,
+// src/lib/software.ts) → nome e sigla. Il sito li mostra come piccole
+// tessere in vetro con la sigla (ProjectModal): per cambiare una sigla o
+// aggiungere un software basta modificare questa tabella.
+export const SOFTWARE = {
+  zbrush: { label: "ZBrush", mono: "Zb" },
+  blender: { label: "Blender", mono: "Bl" },
+  cinema4d: { label: "Cinema 4D", mono: "C4D" },
+  maya: { label: "Maya", mono: "Ma" },
+  "3dsmax": { label: "3ds Max", mono: "3ds" },
+  substance: { label: "Substance Painter", mono: "Pt" },
+  marvelous: { label: "Marvelous Designer", mono: "Md" },
+  keyshot: { label: "KeyShot", mono: "Ks" },
+  unreal: { label: "Unreal Engine", mono: "UE" },
+  unity: { label: "Unity", mono: "Un" },
+  photoshop: { label: "Photoshop", mono: "Ps" },
+  illustrator: { label: "Illustrator", mono: "Ai" },
+  aftereffects: { label: "After Effects", mono: "Ae" },
+  premiere: { label: "Premiere Pro", mono: "Pr" },
+  davinci: { label: "DaVinci Resolve", mono: "DR" },
+  figma: { label: "Figma", mono: "Fg" },
 };
 
 export function softwareLabel(id) {
-  return SOFTWARE_LABELS[id] || id;
+  return SOFTWARE[id]?.label || id;
 }
 
-export function softwareIconUrl(id) {
-  return `${process.env.PUBLIC_URL || ""}/software/${id}.svg`;
+// Sigla per un software sconosciuto: prime due lettere, la prima maiuscola.
+export function softwareMono(id) {
+  if (SOFTWARE[id]) return SOFTWARE[id].mono;
+  const s = String(id).replace(/[^a-z0-9]/gi, "");
+  return s.charAt(0).toUpperCase() + s.charAt(1);
 }

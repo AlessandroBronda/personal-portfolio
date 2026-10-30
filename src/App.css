@@ -83,6 +83,88 @@
 	to   { opacity: 1; }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Ingresso della landing (classi .App--intro / .App--avatar-in da App.js)
+   I contenuti compaiono a cascata: menu → nome → bio → riquadri; il
+   ritratto circolare per ultimo, solo quando l'immagine è pronta.
+   Finito l'ingresso le classi spariscono senza scatti: nome e bio usano
+   la stessa animazione del cambio sezione (textSwapIn), gli altri
+   elementi finiscono già nello stato normale.
+   ════════════════════════════════════════════════════════════════════ */
+@keyframes introUp {
+	from { opacity: 0; translate: 0 14px; }
+	to   { opacity: 1; translate: 0 0; }
+}
+
+@keyframes introFade {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+.App--intro .topbar,
+.App--intro .glass-shell {
+	animation: introFade 0.7s ease both;
+}
+
+/* Voci del menu una dopo l'altra (--i = posizione, impostata in App.js) */
+.App--intro .sections li {
+	animation: introUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+	animation-delay: calc(0.1s + var(--i, 0) * 0.05s);
+}
+
+.App--intro .Name {
+	animation: textSwapIn 0.9s ease 0.25s both;
+}
+
+.App--intro .bio {
+	animation: textSwapIn 0.9s ease 0.42s both;
+}
+
+.App--intro .c1 { animation: introUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
+.App--intro .c2 { animation: introUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.68s both; }
+.App--intro .c3 { animation: introUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.81s both; }
+
+/* Ritratto: nascosto finché non tocca a lui, poi entra sfocato → nitido.
+   scale/filter sono proprietà separate da transform, quindi non
+   interferiscono con il leggero movimento continuo (subtleMove). */
+.App--intro .profilePic-wrapper {
+	opacity: 0;
+	scale: 0.92;
+	filter: blur(10px);
+}
+
+.App--intro.App--avatar-in .profilePic-wrapper {
+	opacity: 1;
+	scale: 1;
+	filter: blur(0);
+	transition:
+		opacity 0.9s ease,
+		scale 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+		filter 0.9s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.App--intro .topbar,
+	.App--intro .glass-shell,
+	.App--intro .sections li,
+	.App--intro .c1,
+	.App--intro .c2,
+	.App--intro .c3 {
+		animation: none;
+	}
+	.App--intro .Name,
+	.App--intro .bio {
+		animation-delay: 0s;
+	}
+	.App--intro .profilePic-wrapper {
+		scale: 1;
+		filter: none;
+	}
+	.App--intro.App--avatar-in .profilePic-wrapper {
+		transition: opacity 0.4s ease;
+	}
+}
+
 /* ── Colonna destra ── */
 .RightCl {
 	height: 108%;

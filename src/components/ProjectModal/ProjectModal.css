@@ -7,7 +7,7 @@
   inset: 0;
   /* Liquid glass: sfondo (la griglia) sfocato e leggermente saturato,
      stessa estetica della topbar/guscio in vetro. */
-  background: rgba(18, 18, 22, 0.45);
+  background: rgba(18, 18, 22, 0.3);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   z-index: 100;
@@ -38,19 +38,22 @@
 }
 
 /* ── Pannello contenuto ── */
-/* Pannello del post in liquid glass: superficie translucida che sfoca ciò
-   che sta dietro, bordo chiaro sottile e ombra morbida — stessa estetica
-   del guscio in vetro della topbar. */
+/* Pannello del post in liquid glass, con la STESSA trasparenza del menu in
+   vetro (.glass-shell in media.css): vetro chiaro quasi trasparente,
+   sfocatura forte e colori saturati, bordo luminoso e riflesso in alto. */
 .modal-content {
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.78),
-    rgba(255, 255, 255, 0.6)
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0.08)
   );
-  backdrop-filter: blur(26px) saturate(170%);
-  -webkit-backdrop-filter: blur(26px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 18px 50px rgba(31, 38, 135, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  color: #141416;
   border-radius: 16px;
   max-width: 800px;
   width: 100%;
@@ -97,7 +100,7 @@
   border: none;
   font-size: 18px;
   cursor: pointer;
-  color: #666;
+  color: rgba(20, 20, 24, 0.7);
   padding: 4px 8px;
   border-radius: 4px;
   transition: color 0.2s ease, background 0.2s ease;
@@ -106,7 +109,7 @@
 
 .modal-close:hover {
   color: #000;
-  background: rgba(0, 0, 0, 0.07);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* ── Header progetto: titolo e didascalia centrati (stile Behance) ── */
@@ -117,7 +120,7 @@
 }
 
 .modal-description {
-  color: rgb(100, 100, 100);
+  color: rgba(20, 20, 24, 0.78);
   font-size: 15px;
   margin: 0 0 16px;
   line-height: 1.65;
@@ -134,10 +137,11 @@
 
 .modal-tag {
   font-size: 12px;
-  padding: 3px 10px;
+  padding: 4px 11px;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.07);
-  color: #555;
+  background: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: rgba(20, 20, 24, 0.82);
 }
 
 /* ── Lista media: flusso continuo stile Behance ──
@@ -162,7 +166,7 @@
 
 .modal-caption {
   font-size: 13px;
-  color: rgb(130, 130, 130);
+  color: rgba(20, 20, 24, 0.65);
   margin: 8px 0 0;
   text-align: center;
 }
@@ -186,13 +190,15 @@
 
 /* ── Link esterno ── */
 .modal-media-link {
+  box-sizing: border-box;
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
 }
 
 .modal-link {
-  color: #0070f3;
+  color: #0057c2;
   text-decoration: none;
   font-size: 15px;
   word-break: break-all;
@@ -202,36 +208,91 @@
   text-decoration: underline;
 }
 
-/* ── Software utilizzati ──
-   Mobile/tablet: footer coi loghi centrati in fondo al post.
-   Desktop (≥1000px): rail verticale fissa a destra, stile Behance — resta
-   ferma mentre il contenuto del post scorre. */
+/* ── Software utilizzati: tessere in liquid glass ──
+   Telefono/tablet: pillole (sigla + nome) centrate in fondo al post.
+   Desktop (≥1000px): colonna di tessere fissa a destra, stile Behance —
+   resta ferma mentre il post scorre; il nome compare al passaggio del mouse. */
+.sw-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #1c1c1e;
+  isolation: isolate;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.16));
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 8px 22px rgba(15, 20, 45, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.85),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+/* Riflesso morbido in alto a sinistra: dà il volume del vetro */
+.sw-chip::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 14px;
+  background: radial-gradient(120% 70% at 25% 0%, rgba(255, 255, 255, 0.55), transparent 60%);
+  pointer-events: none;
+  z-index: -1; /* sotto la sigla, sopra lo sfondo del vetro */
+}
+
+/* Footer (telefono/tablet) */
 .modal-software {
+  list-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  gap: 10px;
+  margin: 28px 0 0;
+  padding: 18px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.modal-software-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  display: block;
-  transition: transform 0.2s ease;
+.sw-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 14px 4px 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  color: rgba(20, 20, 24, 0.85);
 }
 
-.modal-software-icon:hover {
-  transform: translateY(-3px);
+.sw-pill .sw-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  font-size: 12px;
+  box-shadow:
+    0 3px 10px rgba(15, 20, 45, 0.14),
+    inset 0 1px 1px rgba(255, 255, 255, 0.85);
 }
 
-/* Rail laterale: figlia dell'overlay (fixed), quindi immobile allo scroll.
-   Ancorata al BORDO DESTRO del pannello del post (che è centrato, largo
-   max 800px): 50% + 400px + 24px di respiro — non all'estremo dello schermo. */
+.sw-pill .sw-chip::before {
+  border-radius: 999px;
+}
+
+/* Colonna laterale (desktop): figlia dell'overlay (fixed), quindi immobile
+   allo scroll. Ancorata al BORDO DESTRO del pannello (centrato, largo max
+   800px): 50% + 400px + 24px di respiro. */
 .modal-software-rail {
   position: absolute;
   left: calc(50% + 424px);
@@ -241,11 +302,72 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  animation: railIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+@keyframes railIn {
+  from { opacity: 0; translate: 12px 0; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.modal-overlay.closing .modal-software-rail {
+  animation: modalFadeOut 0.3s ease forwards;
+}
+
+.sw-chip--rail {
+  cursor: default;
+}
+
+.sw-chip--rail:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 12px 28px rgba(15, 20, 45, 0.26),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Nome del software: etichetta in vetro che appare a sinistra della tessera */
+.sw-tip {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  translate: 6px -50%;
+  white-space: nowrap;
+  padding: 6px 11px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #1c1c1e;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 6px 18px rgba(15, 20, 45, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    translate 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sw-chip--rail:hover .sw-tip {
+  opacity: 1;
+  translate: 0 -50%;
 }
 
 @media (min-width: 1000px) {
   .modal-software-rail { display: flex; }
-  .modal-software { display: none; }   /* il footer lascia il posto alla rail */
+  .modal-software { display: none; }   /* il footer lascia il posto alla colonna */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-software-rail { animation: none; }
+  .sw-chip,
+  .sw-tip { transition: none; }
 }
 
 /* ── Mobile ── */
@@ -256,24 +378,23 @@
     max-height: 95vh;
   }
 
-  .modal-software-icon {
-    width: 38px;
-    height: 38px;
-  }
-
   .modal-title {
     font-size: 20px;
   }
 }
 
 /* ── Tema scuro ── */
+/* Stessa trasparenza del menu in vetro nel tema scuro */
 body.dark .modal-content {
   background: linear-gradient(
     135deg,
-    rgba(44, 44, 46, 0.62),
-    rgba(28, 28, 30, 0.5)
+    rgba(70, 70, 76, 0.4),
+    rgba(30, 30, 34, 0.16)
   );
   border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: #f1f1f1;
 }
 
@@ -287,24 +408,51 @@ body.dark .modal-close:hover {
 }
 
 body.dark .modal-description {
-  color: rgb(170, 170, 170);
+  color: rgba(241, 241, 241, 0.78);
 }
 
 body.dark .modal-tag {
   background: rgba(255, 255, 255, 0.1);
-  color: #ccc;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #ddd;
 }
 
 body.dark .modal-caption {
-  color: rgb(150, 150, 150);
+  color: rgba(241, 241, 241, 0.62);
 }
 
 body.dark .modal-media-link {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 body.dark .modal-software {
-  border-top-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark .sw-chip {
+  color: #f2f2f4;
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.28);
+}
+
+body.dark .sw-chip::before {
+  background: radial-gradient(120% 70% at 25% 0%, rgba(255, 255, 255, 0.18), transparent 60%);
+}
+
+body.dark .sw-pill {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(241, 241, 241, 0.88);
+}
+
+body.dark .sw-tip {
+  color: #f2f2f4;
+  background: rgba(50, 50, 56, 0.75);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 body.dark .modal-link {

@@ -4,7 +4,7 @@ import React from "react";
 import "./Bio.css";
 import SkillPanel from "./SkillPanel";
 
-const avatar = process.env.PUBLIC_URL + "/bioPic.JPG";
+const avatar = process.env.PUBLIC_URL + "/bioPic.webp";
 
 // Riceve da App.js: { screenWidth, isFading }
 function Bio({ isFading }) {

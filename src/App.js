@@ -15,7 +15,7 @@ import { section as bio } from "./Bio/Bio";
 const FIXED_SECTIONS = [home, bio];
 
 // Immagine della colonna sinistra per le sezioni senza un'immagine propria.
-const DEFAULT_AVATAR = process.env.PUBLIC_URL + "/semoy.jpg";
+const DEFAULT_AVATAR = process.env.PUBLIC_URL + "/semoy.webp";
 // Il ritratto è un cerchio di 350 px (più piccolo su mobile).
 const AVATAR_SIZES = "350px";
 
@@ -47,6 +47,17 @@ function fromContent(s) {
 // Durata (ms) del fade-out del contenuto prima di cambiare sezione.
 const FADE_MS = 300;
 
+// ── Ingresso della landing ──
+// All'apertura del sito i contenuti compaiono a cascata (ritardi in App.css,
+// regole .App--intro). Il ritratto circolare arriva per ultimo: non prima di
+// AVATAR_AFTER_MS e solo quando l'immagine è scaricata e decodificata, così
+// compare in dissolvenza invece che a pezzi. Se non arriva entro
+// AVATAR_TIMEOUT_MS si mostra comunque.
+const INTRO_AVATAR = avatarOf(home.avatar).src;
+const AVATAR_AFTER_MS = 1100;
+const AVATAR_TIMEOUT_MS = 5000;
+const INTRO_END_MS = 1400; // dopo la comparsa del ritratto: fine dell'ingresso
+
 // Testi di default della colonna sinistra (una sezione può sovrascriverli
 // con i campi `name` / `bio` / `bioItalic`: nel codice per HOME e BIO,
 // dal gestionale per le altre).
@@ -65,6 +76,44 @@ function App() {
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
 	const isMobileNav = screenWidth >= 800 && screenWidth < 1450;
+
+	// Ingresso: "cascade" → "avatar" (il ritratto entra) → "done".
+	const [intro, setIntro] = useState("cascade");
+	const [avatarLoaded, setAvatarLoaded] = useState(false);
+	const [cascadeDone, setCascadeDone] = useState(false);
+
+	useEffect(() => {
+		const t1 = setTimeout(() => setCascadeDone(true), AVATAR_AFTER_MS);
+		const t2 = setTimeout(() => setAvatarLoaded(true), AVATAR_TIMEOUT_MS);
+		return () => {
+			clearTimeout(t1);
+			clearTimeout(t2);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (intro !== "cascade" || !cascadeDone || !avatarLoaded) return;
+		setIntro("avatar");
+	}, [intro, cascadeDone, avatarLoaded]);
+
+	useEffect(() => {
+		if (intro !== "avatar") return;
+		const t = setTimeout(() => setIntro("done"), INTRO_END_MS);
+		return () => clearTimeout(t);
+	}, [intro]);
+
+	// Il ritratto è "pronto" quando è scaricato E decodificato: solo allora
+	// si dipinge tutto insieme.
+	const introAvatarRef = useCallback((img) => {
+		if (!img) return;
+		const ready = () => setAvatarLoaded(true);
+		const decode = () => (img.decode ? img.decode().then(ready, ready) : ready());
+		if (img.complete && img.naturalWidth) decode();
+		else {
+			img.addEventListener("load", decode, { once: true });
+			img.addEventListener("error", ready, { once: true });
+		}
+	}, []);
 
 	// Finché content.json non arriva (o se il bucket non risponde) il menu
 	// ha solo HOME e BIO.
@@ -162,9 +211,10 @@ function App() {
 		[activeSection]
 	);
 
-	const navItems = sections.map(({ key, label }) => (
+	const navItems = sections.map(({ key, label }, i) => (
 		<li
 			key={key}
+			style={{ "--i": i }} // posizione nella cascata d'ingresso
 			className={`${activeSection === key ? "active" : ""} ${
 				clickedItem === key ? "clicked" : ""
 			}`}
@@ -203,7 +253,16 @@ function App() {
 	const fadeClass = isFading ? "section-fading" : "";
 
 	return (
-		<div className={`App ${isFullWidth ? "App--full-width" : ""}`}>
+		<div
+			className={[
+				"App",
+				isFullWidth && "App--full-width",
+				intro !== "done" && "App--intro",
+				intro === "avatar" && "App--avatar-in",
+			]
+				.filter(Boolean)
+				.join(" ")}
+		>
 			{/* Barra superiore (tablet/desktop). Sotto i 1450px il menu (lista
 			    sezioni) vive DENTRO la topbar; su desktop ≥1450 il menu è laterale
 			    nella RightCl e la topbar ha solo il toggle. Su mobile (<800) è
@@ -257,6 +316,7 @@ function App() {
 						{avatars.map(({ width, height, ...img }) => (
 							<img
 								key={img.src}
+								ref={img.src === INTRO_AVATAR ? introAvatarRef : undefined}
 								{...img}
 								className={`pic-layer ${activeAvatar === img.src ? "" : "hidden"}`}
 								alt="Alessandro Bronda"
