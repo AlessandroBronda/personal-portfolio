@@ -205,6 +205,10 @@ function App() {
 			if (item === activeSection) return;
 			setIsFading(true);
 			setTimeout(() => {
+				// La nuova sezione parte sempre dall'alto: niente barra del menu
+				// sopra a metà delle immagini (si torna su mentre il contenuto è
+				// sfumato, quindi il salto non si vede).
+				window.scrollTo({ top: 0, left: 0, behavior: "instant" });
 				setActiveSection(item);
 				setMenuOpen(false);
 				setIsFading(false);
