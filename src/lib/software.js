@@ -19,6 +19,14 @@ export const SOFTWARE = {
   premiere: { label: "Premiere Pro", mono: "Pr" },
   davinci: { label: "DaVinci Resolve", mono: "DR" },
   figma: { label: "Figma", mono: "Fg" },
+  // Programmazione
+  react: { label: "React", mono: "Re" },
+  nextjs: { label: "Next.js", mono: "Nx" },
+  typescript: { label: "TypeScript", mono: "TS" },
+  javascript: { label: "JavaScript", mono: "JS" },
+  nodejs: { label: "Node.js", mono: "Nd" },
+  python: { label: "Python", mono: "Py" },
+  aisupport: { label: "AI support", mono: "AI" },
 };
 
 export function softwareLabel(id) {
