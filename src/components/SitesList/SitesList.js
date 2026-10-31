@@ -10,9 +10,9 @@ import ProjectModal from "../ProjectModal/ProjectModal";
 // del browser stilizzata (porta al sito), a destra titolo, descrizione, tag,
 // software e i pulsanti. Sul telefono l'anteprima va sopra e il testo sotto.
 
-// Larghezza a schermo dell'anteprima: ~60% della card su desktop, tutta la
+// Larghezza a schermo dell'anteprima: metà della card su desktop, tutta la
 // larghezza sul telefono (vedi SitesList.css).
-const SHOT_SIZES = "(max-width: 900px) 100vw, 60vw";
+const SHOT_SIZES = "(max-width: 900px) 100vw, 50vw";
 
 const domain = (url) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 

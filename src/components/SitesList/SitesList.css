@@ -1,16 +1,16 @@
 /* ════════════════════════════════════════════════════════════════════
    SitesList — card orizzontali dei siti (sezioni "sites", es. Web design)
-   • Una card per sito, a tutta larghezza con margini ai lati, in colonna.
-   • Desktop/tablet: anteprima a sinistra (~60%), testo a destra.
-   • Telefono (<900px): anteprima sopra, testo sotto.
+   • Una card per sito, quasi da bordo a bordo dello schermo, in colonna.
+   • Desktop/tablet: anteprima a sinistra (metà della card), testo a destra;
+     anteprima in 2:1 (la parte alta della pagina) → card più bassa.
+   • Telefono (<900px): anteprima sopra (16:10), testo sotto.
    ════════════════════════════════════════════════════════════════════ */
 
 .sites-wrapper {
   width: 100%;
-  max-width: 1500px;
   align-self: center;
   margin: 24px auto 0;
-  padding: 0 clamp(16px, 4vw, 64px) 40px;
+  padding: 0 clamp(12px, 1.6vw, 32px) 40px;
   box-sizing: border-box;
   max-height: calc(100vh - 160px);
   overflow-y: auto;
@@ -26,7 +26,7 @@
 /* ── Card ── */
 .site-card {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: stretch;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -90,7 +90,7 @@
 
 .site-shot-frame {
   display: block;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2 / 1; /* la parte alta della pagina: card più bassa */
   overflow: hidden;
   background: #e9e9ec;
 }
@@ -114,7 +114,7 @@ a.site-shot:hover .site-shot-img {
   flex-direction: column;
   justify-content: center;
   gap: 14px;
-  padding: clamp(22px, 3vw, 44px);
+  padding: clamp(20px, 2.6vw, 52px) clamp(22px, 3.4vw, 72px);
   min-width: 0;
 }
 
@@ -247,6 +247,9 @@ a.site-shot:focus-visible {
   .site-shot {
     margin: 10px 10px 0;
     border-radius: 12px;
+  }
+  .site-shot-frame {
+    aspect-ratio: 16 / 10; /* sul telefono l'anteprima intera */
   }
   .site-bar {
     height: 26px;
