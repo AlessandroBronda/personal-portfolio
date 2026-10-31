@@ -1,0 +1,358 @@
+/* ════════════════════════════════════════════════════════════════════
+   SitesList — card orizzontali dei siti (sezioni "sites", es. Web design)
+   • Una card per sito, a tutta larghezza con margini ai lati, in colonna.
+   • Desktop/tablet: anteprima a sinistra (~60%), testo a destra.
+   • Telefono (<900px): anteprima sopra, testo sotto.
+   ════════════════════════════════════════════════════════════════════ */
+
+.sites-wrapper {
+  width: 100%;
+  max-width: 1500px;
+  align-self: center;
+  margin: 24px auto 0;
+  padding: 0 clamp(16px, 4vw, 64px) 40px;
+  box-sizing: border-box;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  transition: opacity 0.3s ease;
+}
+
+.sites-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 36px);
+}
+
+/* ── Card ── */
+.site-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  align-items: stretch;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 22px;
+  box-shadow: 0 14px 40px rgba(20, 24, 40, 0.07);
+  overflow: hidden;
+  animation: siteIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes siteIn {
+  from { opacity: 0; translate: 0 18px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+/* ── Anteprima: finestra del browser stilizzata ── */
+.site-shot {
+  display: flex;
+  flex-direction: column;
+  margin: 14px 0 14px 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f1f1f3;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  color: inherit;
+  text-decoration: none;
+  isolation: isolate;
+}
+
+.site-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  flex-shrink: 0;
+  background: #f1f1f3;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.site-bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d4d4d8;
+}
+
+.site-bar-url {
+  flex: 1;
+  min-width: 0;
+  margin: 0 8px 0 10px;
+  padding: 3px 10px;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #6b6b72;
+  font-size: 12px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-shot-frame {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #e9e9ec;
+}
+
+.site-shot-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: scale 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a.site-shot:hover .site-shot-img {
+  scale: 1.025;
+}
+
+/* ── Testo ── */
+.site-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: clamp(22px, 3vw, 44px);
+  min-width: 0;
+}
+
+.site-title {
+  margin: 0;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.15;
+  color: #111;
+}
+
+.site-domain {
+  margin-top: -8px;
+  font-size: 13px;
+  color: #8a8a90;
+  letter-spacing: 0.01em;
+}
+
+.site-desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(20, 20, 24, 0.72);
+  white-space: pre-line;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.site-tags,
+.site-software {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.site-tags li {
+  font-size: 12px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  background: #f2f2f4;
+  color: #4a4a50;
+}
+
+/* Le pillole dei software (.sw-pill/.sw-chip, da ProjectModal.css) su fondo chiaro */
+.site-software .sw-pill {
+  background: #f6f6f8;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.site-software .sw-pill .sw-chip {
+  box-shadow:
+    0 2px 6px rgba(15, 20, 45, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.site-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.site-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: transparent;
+  color: #111;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.site-btn--primary {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+.site-btn--primary:hover {
+  background: #2a2a2e;
+}
+
+.site-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site-btn:focus-visible,
+a.site-shot:focus-visible {
+  outline: 2px solid #4a90d9;
+  outline-offset: 3px;
+}
+
+/* ── Tablet ── */
+@media (max-width: 1450px) {
+  .sites-wrapper {
+    max-height: calc(100vh - 150px);
+  }
+}
+
+/* ── Telefono e tablet stretti: anteprima sopra, testo sotto ── */
+@media (max-width: 900px) {
+  .site-card {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 18px;
+  }
+  .site-shot {
+    margin: 10px 10px 0;
+    border-radius: 12px;
+  }
+  .site-bar {
+    height: 26px;
+  }
+  .site-bar i {
+    width: 7px;
+    height: 7px;
+  }
+  .site-bar-url {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+  .site-info {
+    padding: 20px 20px 24px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 800px) {
+  .sites-wrapper {
+    margin-top: 8px;
+    padding: 0 12px 32px;
+    max-height: calc(100vh - 70px);
+  }
+  .site-desc {
+    font-size: 14px;
+  }
+  .site-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* Schermi bassi in orizzontale: la lista scorre con la pagina */
+@media (max-width: 1450px) and (max-height: 500px) and (orientation: landscape) {
+  .sites-wrapper {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-card {
+    animation: none;
+  }
+  .site-shot-img,
+  .site-btn {
+    transition: none;
+  }
+}
+
+/* ── Tema scuro ── */
+body.dark .site-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+
+body.dark .site-shot,
+body.dark .site-bar {
+  background: #2c2c30;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .site-bar i {
+  background: #55555c;
+}
+
+body.dark .site-bar-url {
+  background: #1f1f22;
+  color: #a5a5ad;
+}
+
+body.dark .site-title {
+  color: #f2f2f4;
+}
+
+body.dark .site-desc {
+  color: rgba(241, 241, 241, 0.72);
+}
+
+body.dark .site-tags li {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d6d6da;
+}
+
+body.dark .site-software .sw-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .site-btn {
+  color: #f2f2f4;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark .site-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .site-btn--primary {
+  background: #f2f2f4;
+  border-color: #f2f2f4;
+  color: #111;
+}
+
+body.dark .site-btn--primary:hover {
+  background: #ffffff;
+}

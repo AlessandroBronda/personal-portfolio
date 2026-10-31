@@ -120,6 +120,7 @@
 @media (max-width: 1450px) {
   .project-grid-wrapper {
     max-height: calc(100vh - 150px);
+    padding: 0 24px;   /* tablet: un po' più di respiro ai lati */
   }
 }
 
@@ -132,6 +133,14 @@
        .App--full-width (56px) sotto la barra da 54px. */
     margin-top: 0;
     max-height: calc(100vh - 70px);
+  }
+  .project-grid-wrapper {
+    padding: 0 12px;
+  }
+  /* Sezione con colonna sinistra (immagine/testo dal gestionale): la
+     griglia sta sotto al testo, con un po' di stacco */
+  .RightCl:not(.RightCl--full) .project-grid-wrapper {
+    margin-top: 24px;
   }
   .project-grid {
     gap: 6px;

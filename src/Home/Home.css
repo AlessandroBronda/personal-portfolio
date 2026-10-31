@@ -5,13 +5,22 @@
    ════════════════════════════════════════════════════════════════════ */
 
 /* ── Box c1: Contatti ── */
+/* Il box che contiene i contatti fa da riferimento per le unità cqi. */
+.c1:has(> .contacts) {
+	container-type: inline-size;
+}
+
 .contacts {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
 	background-color: rgb(245, 127, 153); /* rosa fucsia + trasparenza */
 	border-radius: 10px;
-	padding: 24px 28px;
+	/* Margini e testo seguono la larghezza del riquadro (container query
+	   sul box c1, regola qui sotto): indirizzi lunghi come
+	   "artstation/alessandrobronda" restano su una riga anche quando il
+	   riquadro è stretto (desktop 1450–1700 px, telefoni piccoli). */
+	padding: clamp(16px, 8cqi, 28px);
 	color: #ffffff;
 	display: flex;
 	flex-direction: column;
@@ -69,12 +78,112 @@
 }
 
 .contact-value {
-	font-size: 15px;
+	/* ≈ larghezza disponibile / 14 caratteri, tra 11 e 15 px */
+	font-size: clamp(11px, 4.9cqi, 15px);
 	color: #ffffff;
 	text-decoration: none;
-	word-break: break-word;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .contact-value:hover {
 	text-decoration: underline;
+}
+
+/* ── Telefono: Contatti richiudibili ──
+   Il titolo è un pulsante; il contenuto si apre/chiude animando l'altezza
+   (grid-template-rows 0fr → 1fr). Su tablet e desktop resta sempre aperto. */
+.contacts-body {
+	display: grid;
+	grid-template-rows: 1fr;
+}
+
+.contacts-body > .contacts-list {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.contacts--collapsible {
+	gap: 0;
+	padding: 0;
+	justify-content: flex-start;
+}
+
+.contacts--collapsible .contacts-title {
+	font-size: 20px;
+}
+
+.contacts-toggle {
+	all: unset;
+	box-sizing: border-box;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 22px;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.contacts-toggle:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: -4px;
+	border-radius: 10px;
+}
+
+.contacts-chevron {
+	width: 22px;
+	height: 22px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2.2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contacts--collapsible.is-open .contacts-chevron {
+	transform: rotate(180deg);
+}
+
+.contacts--collapsible .contacts-body {
+	grid-template-rows: 0fr;
+	opacity: 0;
+	transition:
+		grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 0.3s ease;
+}
+
+.contacts--collapsible.is-open .contacts-body {
+	grid-template-rows: 1fr;
+	opacity: 1;
+}
+
+/* niente padding verticale sulla lista (da chiusa resterebbe visibile):
+   lo spazio sotto l'ultima voce lo dà questo blocco, che si chiude con lei */
+.contacts--collapsible .contacts-list {
+	padding: 0 22px;
+}
+
+.contacts--collapsible .contacts-list::after {
+	content: "";
+	display: block;
+	height: 6px;
+}
+
+/* Il riquadro c1 che contiene i contatti non impone un'altezza minima:
+   da chiuso è alto quanto il titolo. */
+@media (max-width: 800px) {
+	.c1:has(> .contacts) {
+		min-height: 0;
+		background: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.contacts--collapsible .contacts-body,
+	.contacts-chevron {
+		transition: none;
+	}
 }

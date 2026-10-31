@@ -30,9 +30,20 @@ function normalize(data) {
 	const sections = data.sections.filter((s) => s && s.visible && s.id && s.label).sort(byOrder);
 	const ids = new Set(sections.map((s) => s.id));
 	const projects = (data.projects || [])
-		.filter((p) => p && p.status === "published" && ids.has(p.section) && isImageRef(p.cover))
+		// Serve un'immagine: la copertina (griglia) o l'anteprima del sito (card dei siti).
+		// Se una sezione cambia impaginazione, ognuna fa da riserva all'altra.
+		.filter(
+			(p) =>
+				p &&
+				p.status === "published" &&
+				ids.has(p.section) &&
+				(isImageRef(p.cover) || isImageRef(p.preview))
+		)
 		.map((p) => ({
 			...p,
+			cover: isImageRef(p.cover) ? p.cover : p.preview,
+			preview: isImageRef(p.preview) ? p.preview : p.cover,
+			url: typeof p.url === "string" && /^https?:\/\//.test(p.url) ? p.url : null,
 			media: (p.media || []).filter((m) =>
 				m.type === "image" ? isImageRef(m.image) : typeof m.url === "string"
 			),
@@ -41,6 +52,8 @@ function normalize(data) {
 	return {
 		sections: sections.map((s) => ({
 			...s,
+			// grid = griglia di copertine (predefinita), sites = card orizzontali dei siti
+			layout: s.layout === "sites" ? "sites" : "grid",
 			projects: projects.filter((p) => p.section === s.id),
 		})),
 	};
