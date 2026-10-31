@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useId, useState } from "react";
 
 // ── Icone (SVG, stile coerente con il resto del sito) ─────────────────
 // email/linkedin: outline (stroke). behance/artstation: loghi di brand (fill).
@@ -53,35 +53,74 @@ const CONTACTS = [
 	{ id: "linkedin",   label: "LinkedIn",   placeholder: "/in/username" },
 ];
 
-function Contacts() {
-	return (
-		<div className="contacts">
-			<h2 className="contacts-title">Contatti</h2>
+// Sul telefono (≤800 px) il riquadro parte chiuso e si apre al tocco sul titolo.
+const MOBILE = "(max-width: 800px)";
 
-			<ul className="contacts-list">
-				{CONTACTS.map(({ id, label, value, placeholder, href }) => {
-					// I link a profili esterni (http) si aprono in una nuova scheda.
-					const esterno = typeof href === "string" && href.startsWith("http");
-					return (
-					<li className="contact-item" key={id}>
-						<span className="contact-icon">{ICONS[id]}</span>
-						<span className="contact-text">
-							<span className="contact-label">{label}</span>
-							{/* POPOLA QUI Behance/ArtStation/LinkedIn: sostituisci href e testo */}
-							{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-							<a
-								className="contact-value"
-								href={href || "#"}
-								target={esterno ? "_blank" : undefined}
-								rel={esterno ? "noopener noreferrer" : undefined}
-							>
-								{value || placeholder}
-							</a>
-						</span>
-					</li>
-					);
-				})}
-			</ul>
+function useIsMobile() {
+	const [mobile, setMobile] = useState(() => window.matchMedia?.(MOBILE).matches ?? false);
+	useEffect(() => {
+		const mq = window.matchMedia?.(MOBILE);
+		if (!mq) return;
+		const onChange = (e) => setMobile(e.matches);
+		mq.addEventListener("change", onChange);
+		return () => mq.removeEventListener("change", onChange);
+	}, []);
+	return mobile;
+}
+
+function Contacts() {
+	const mobile = useIsMobile();
+	const [open, setOpen] = useState(false);
+	const bodyId = useId();
+	const expanded = !mobile || open;
+
+	return (
+		<div className={`contacts ${mobile ? "contacts--collapsible" : ""} ${expanded ? "is-open" : ""}`}>
+			{mobile ? (
+				<h2 className="contacts-title">
+					<button
+						type="button"
+						className="contacts-toggle"
+						aria-expanded={open}
+						aria-controls={bodyId}
+						onClick={() => setOpen((o) => !o)}
+					>
+						Contatti
+						<svg className="contacts-chevron" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="m6 9 6 6 6-6" />
+						</svg>
+					</button>
+				</h2>
+			) : (
+				<h2 className="contacts-title">Contatti</h2>
+			)}
+
+			<div className="contacts-body" id={bodyId} inert={!expanded ? true : undefined}>
+				<ul className="contacts-list">
+					{CONTACTS.map(({ id, label, value, placeholder, href }) => {
+						// I link a profili esterni (http) si aprono in una nuova scheda.
+						const esterno = typeof href === "string" && href.startsWith("http");
+						return (
+						<li className="contact-item" key={id}>
+							<span className="contact-icon">{ICONS[id]}</span>
+							<span className="contact-text">
+								<span className="contact-label">{label}</span>
+								{/* POPOLA QUI Behance/ArtStation/LinkedIn: sostituisci href e testo */}
+								{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+								<a
+									className="contact-value"
+									href={href || "#"}
+									target={esterno ? "_blank" : undefined}
+									rel={esterno ? "noopener noreferrer" : undefined}
+								>
+									{value || placeholder}
+								</a>
+							</span>
+						</li>
+						);
+					})}
+				</ul>
+			</div>
 		</div>
 	);
 }

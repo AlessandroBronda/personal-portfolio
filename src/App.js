@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./App.css";
 import "./media.css";
 import ProjectGrid from "./components/ProjectGrid/ProjectGrid";
+import SitesList from "./components/SitesList/SitesList";
 import { useContent, imageProps } from "./lib/content";
 
 // ── Sezioni ──────────────────────────────────────────────────────────────
@@ -37,6 +38,7 @@ function fromContent(s) {
 		label: s.label,
 		avatar: s.avatar ? imageProps(s.avatar, AVATAR_SIZES) : DEFAULT_AVATAR,
 		projects: s.projects,
+		layout: s.layout,
 		name: intro.name,
 		bio: intro.bio,
 		bioItalic: Boolean(intro.italic),
@@ -351,9 +353,14 @@ function App() {
 						// Sezione con render personalizzato (es. BIO)
 						<Render screenWidth={screenWidth} isFading={isFading} />
 					) : active.projects ? (
-						// Sezione del gestionale: griglia dei lavori. La key la
-						// rimonta a ogni cambio sezione (comparsa a cascata, scheda chiusa).
-						<ProjectGrid key={active.key} projects={active.projects} isFading={isFading} />
+						// Sezione del gestionale: griglia dei lavori o card dei siti
+						// (impaginazione scelta nel gestionale). La key la rimonta a ogni
+						// cambio sezione (comparsa a cascata, scheda chiusa).
+						active.layout === "sites" ? (
+							<SitesList key={active.key} projects={active.projects} isFading={isFading} />
+						) : (
+							<ProjectGrid key={active.key} projects={active.projects} isFading={isFading} />
+						)
 					) : (
 						// Layout a tre box (HOME)
 						<>

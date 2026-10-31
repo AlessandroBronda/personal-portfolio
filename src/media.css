@@ -56,10 +56,13 @@
 	}
 
 	.Name {
-		font-size: 60px;
+		/* si adatta alla colonna: "Illustratore e 3D generalist" o un titolo
+		   lungo dal gestionale non escono mai dal bordo */
+		font-size: clamp(34px, 5.2vw, 60px);
 		margin-left: 35px;
 		margin-top: 0px;
 		margin-bottom: 0px;
+		overflow-wrap: break-word;
 	}
 	.bio {
 		margin-left: 35px;
@@ -94,6 +97,114 @@
 		width: 86%;
 		height: auto;
 		margin: 30px auto 0;
+	}
+
+	/* Sezioni dei lavori (colonna sinistra nascosta): la colonna destra
+	   prende tutta la larghezza e la griglia resta centrata come su desktop.
+	   Senza questo restava al 50% (regola .RightCl qui sopra) e si
+	   vedeva stretta e appoggiata a sinistra. */
+	.App-header--full {
+		width: 100%;
+	}
+	.RightCl--full {
+		width: 100%;
+	}
+}
+
+/* ── Tablet in verticale (801–960 px, es. iPad Air/Pro 11") ──
+   Due colonne qui sono troppo strette (nome che tocca il riquadro accanto,
+   competenze della BIO tagliate): colonna unica come sul telefono, ma con
+   ritratto e titolo più grandi e il menu nella barra in alto. */
+@media (min-width: 801px) and (max-width: 960px) {
+	.App-header:not(.App-header--full) {
+		flex-direction: column;
+		width: 88%;
+		margin: 24px auto 0;
+		gap: 10px;
+	}
+	.LeftCl {
+		width: 100%;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		grid-template-areas:
+			"pic name"
+			"bio bio";
+		align-items: center;
+		column-gap: 32px;
+		row-gap: 22px;
+	}
+	.LeftCl--hidden {
+		display: none !important;
+	}
+	.LeftCl-text {
+		display: contents;
+	}
+	.profilePic-wrapper {
+		grid-area: pic;
+		width: 190px;
+		height: 190px;
+		margin: 0;
+	}
+	.Name {
+		grid-area: name;
+		margin: 0;
+		font-size: clamp(34px, 5.4vw, 48px);
+	}
+	.bio {
+		grid-area: bio;
+		margin: 0;
+		width: 100%;
+	}
+	.RightCl {
+		width: 100%;
+	}
+	.c1,
+	.c2 {
+		width: 47%;
+		min-height: 240px;
+		margin: 36px auto 0;
+	}
+	.c3 {
+		width: 88%;
+		margin: 36px auto 90px;
+	}
+	.bioSheet {
+		width: 100%;
+		margin: 30px 0 40px;
+	}
+	/* menu nella barra: un filo più compatto, così 8 voci stanno senza scorrere */
+	.topbar-nav {
+		gap: 16px;
+	}
+	.topbar-nav li {
+		font-size: 13px;
+	}
+	.RightCl:not(.RightCl--full) .project-grid-wrapper {
+		margin-top: 30px;
+		padding: 0;
+		max-height: none;
+		overflow: visible;
+	}
+}
+
+/* ── Telefoni in orizzontale e schermi bassi (≤500 px di altezza) ──
+   Layout da tablet ma con poca altezza: ritratto e titolo più piccoli,
+   e la griglia scorre con la pagina invece che in un riquadro basso. */
+@media (max-width: 1450px) and (max-height: 500px) and (orientation: landscape) {
+	.profilePic-wrapper {
+		width: 150px;
+		height: 150px;
+	}
+	.Name {
+		font-size: 34px;
+	}
+	.LeftCl {
+		gap: 16px;
+	}
+	.project-grid-wrapper {
+		max-height: none;
+		overflow: visible;
+		padding-bottom: 24px;
 	}
 }
 
@@ -455,6 +566,27 @@
 		width: 85%;
 		background-color: rgba(0, 0, 0, 0.178);
 		border-radius: 20px;
+	}
+}
+
+/* ── Telefoni stretti (≤360 px, es. iPhone SE 1ª gen, Android piccoli) ── */
+@media (max-width: 360px) {
+	.profilePic-wrapper {
+		width: 100px;
+		height: 100px;
+		margin-left: 20px;
+	}
+	.Name {
+		font-size: 23px;
+		overflow-wrap: break-word;
+		min-width: 0;
+	}
+	.bio {
+		margin-left: 20px;
+		width: calc(100% - 40px);
+	}
+	.LeftCl {
+		column-gap: 14px;
 	}
 }
 
