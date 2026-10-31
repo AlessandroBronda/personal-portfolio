@@ -513,3 +513,63 @@ body.dark .hamburger {
 .sections li.nav-theme-toggle .theme-toggle {
 	margin-left: 0;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   Landing su desktop (≥1451px): colonna sinistra più stretta, più spazio
+   ai riquadri. I tre riquadri formano un unico blocco (95% della colonna
+   destra) con spazi uguali (30px) in orizzontale e in verticale; il menu
+   è centrato sullo stesso blocco. Contatti mantiene la sua larghezza
+   (~42% del blocco, 337px a 1920), il riquadro accanto si allunga.
+   ════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1451px) {
+	.App:not(.App--full-width) .LeftCl {
+		width: 44%;
+	}
+	.App:not(.App--full-width) .RightCl {
+		width: 56%;
+	}
+
+	.App:not(.App--full-width) .profilePic-wrapper {
+		margin-left: 16px;
+	}
+	.App:not(.App--full-width) .Name {
+		margin-left: 24px; /* allineato al ritratto */
+		margin-bottom: 4px; /* la bio sale di ~30px */
+	}
+	.App:not(.App--full-width) .bio {
+		margin-left: 14px; /* + 10px di padding = allineato al ritratto */
+		width: 80%;
+	}
+
+	.App:not(.App--full-width) .RightCl > .sections {
+		width: 95%;
+		justify-content: center;
+		column-gap: 30px;
+	}
+
+	.App:not(.App--full-width) .cMaster {
+		width: 95%;
+		margin: 20px auto 0; /* mai attaccato al menu, anche se va su due righe */
+		flex-wrap: nowrap;
+		gap: 30px;
+	}
+	.App:not(.App--full-width) .c1 {
+		flex: 0 0 42.2%;
+		width: auto;
+		margin: auto 0 0; /* appoggiati in basso: lo spazio fino al riquadro sotto è il gap */
+	}
+	.App:not(.App--full-width) .c2 {
+		flex: 1 1 auto;
+		width: auto;
+		margin: auto 0 0;
+	}
+	.App:not(.App--full-width) .c3.specialPosition {
+		width: 95%;
+		margin: 30px auto 0;
+	}
+	/* BIO: il foglio delle competenze allineato allo stesso blocco del menu */
+	.App:not(.App--full-width) .bioSheet-wrapper {
+		width: 95%;
+		margin: 0 auto;
+	}
+}
