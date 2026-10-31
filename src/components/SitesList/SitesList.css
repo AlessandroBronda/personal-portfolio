@@ -1,9 +1,9 @@
 /* ════════════════════════════════════════════════════════════════════
-   SitesList — card orizzontali dei siti (sezioni "sites", es. Web design)
-   • Una card per sito, quasi da bordo a bordo dello schermo, in colonna.
-   • Desktop/tablet: anteprima a sinistra (metà della card), testo a destra;
-     anteprima in 2:1 (la parte alta della pagina) → card più bassa.
-   • Telefono (<900px): anteprima sopra (16:10), testo sotto.
+   SitesList — card dei siti (sezioni "sites", es. Web design)
+   • Desktop (≥1200px): card orizzontale quasi da bordo a bordo; anteprima
+     a sinistra (metà card, 2:1), testo a destra.
+   • Sotto i 1200px: card compatta (anteprima + titolo); al tocco si apre
+     con la stessa animazione dei Contatti.
    ════════════════════════════════════════════════════════════════════ */
 
 .sites-wrapper {
@@ -20,14 +20,14 @@
 .sites-list {
   display: flex;
   flex-direction: column;
-  gap: clamp(20px, 3vw, 36px);
+  gap: clamp(16px, 2.4vw, 32px);
 }
 
-/* ── Card ── */
+/* ── Card (desktop) ── */
 .site-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: stretch;
+  align-items: center;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 22px;
@@ -41,58 +41,19 @@
   to   { opacity: 1; translate: 0 0; }
 }
 
-/* ── Anteprima: finestra del browser stilizzata ── */
+/* ── Anteprima della pagina iniziale ── */
 .site-shot {
-  display: flex;
-  flex-direction: column;
-  margin: 14px 0 14px 14px;
+  display: block;
+  margin: 12px 0 12px 12px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 14px;
   overflow: hidden;
-  background: #f1f1f3;
-  border: 1px solid rgba(0, 0, 0, 0.07);
+  aspect-ratio: 2 / 1; /* la parte alta della pagina: card bassa */
+  background: #e9e9ec;
   color: inherit;
   text-decoration: none;
   isolation: isolate;
-}
-
-.site-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
-  flex-shrink: 0;
-  background: #f1f1f3;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.site-bar i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #d4d4d8;
-}
-
-.site-bar-url {
-  flex: 1;
-  min-width: 0;
-  margin: 0 8px 0 10px;
-  padding: 3px 10px;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #6b6b72;
-  font-size: 12px;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.site-shot-frame {
-  display: block;
-  aspect-ratio: 2 / 1; /* la parte alta della pagina: card più bassa */
-  overflow: hidden;
-  background: #e9e9ec;
 }
 
 .site-shot-img {
@@ -113,33 +74,53 @@ a.site-shot:hover .site-shot-img {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 14px;
-  padding: clamp(20px, 2.6vw, 52px) clamp(22px, 3.4vw, 72px);
+  padding: clamp(18px, 2vw, 40px) clamp(22px, 3.4vw, 72px);
+  min-width: 0;
+}
+
+.site-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   min-width: 0;
 }
 
 .site-title {
   margin: 0;
-  font-size: clamp(22px, 2.2vw, 30px);
+  font-size: clamp(22px, 2.1vw, 30px);
+  font-weight: 700;
   line-height: 1.15;
   color: #111;
 }
 
 .site-domain {
-  margin-top: -8px;
   font-size: 13px;
   color: #8a8a90;
   letter-spacing: 0.01em;
 }
 
+/* Il corpo (descrizione, tag, pulsanti, software): su desktop sempre aperto */
+.site-body {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.site-body-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+}
+
 .site-desc {
   margin: 0;
   font-size: 15px;
-  line-height: 1.65;
+  line-height: 1.6;
   color: rgba(20, 20, 24, 0.72);
   white-space: pre-line;
   display: -webkit-box;
-  -webkit-line-clamp: 7;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -178,12 +159,13 @@ a.site-shot:hover .site-shot-img {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .site-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 11px 18px;
   border-radius: 999px;
@@ -215,7 +197,8 @@ a.site-shot:hover .site-shot-img {
   background: #2a2a2e;
 }
 
-.site-btn svg {
+.site-btn svg,
+.site-chevron {
   width: 16px;
   height: 16px;
   fill: none;
@@ -226,45 +209,139 @@ a.site-shot:hover .site-shot-img {
 }
 
 .site-btn:focus-visible,
-a.site-shot:focus-visible {
+.site-shot:focus-visible,
+.site-head:focus-visible {
   outline: 2px solid #4a90d9;
   outline-offset: 3px;
 }
 
-/* ── Tablet ── */
+/* ── Tablet: area di scorrimento ── */
 @media (max-width: 1450px) {
   .sites-wrapper {
     max-height: calc(100vh - 150px);
   }
 }
 
-/* ── Telefono e tablet stretti: anteprima sopra, testo sotto ── */
-@media (max-width: 900px) {
+/* ════════════════════════════════════════════════════════════════════
+   Sotto i 1200px: card compatta che si apre al tocco
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1199px) {
   .site-card {
     grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
     border-radius: 18px;
+    box-shadow: 0 8px 26px rgba(20, 24, 40, 0.07);
   }
+
   .site-shot {
-    margin: 10px 10px 0;
+    margin: 8px 8px 0;
     border-radius: 12px;
+    aspect-ratio: 2 / 1;
+    cursor: pointer;
+    font: inherit;
+    width: calc(100% - 16px);
+    -webkit-tap-highlight-color: transparent;
   }
-  .site-shot-frame {
-    aspect-ratio: 16 / 10; /* sul telefono l'anteprima intera */
-  }
-  .site-bar {
-    height: 26px;
-  }
-  .site-bar i {
-    width: 7px;
-    height: 7px;
-  }
-  .site-bar-url {
-    font-size: 11px;
-    padding: 2px 8px;
-  }
+
   .site-info {
-    padding: 20px 20px 24px;
+    padding: 0;
+  }
+
+  /* Titolo + freccia: anche lui apre e chiude */
+  .site-head {
+    all: unset;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 12px;
+    padding: 12px 16px 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .site-title {
+    font-size: 19px;
+  }
+
+  .site-domain {
+    font-size: 12px;
+  }
+
+  .site-chevron {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #555;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .site-card--compact.is-open .site-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Apertura animata come i Contatti (grid-template-rows 0fr → 1fr) */
+  .site-card--compact .site-body {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.3s ease;
+  }
+
+  .site-card--compact.is-open .site-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .site-body-inner {
+    overflow: hidden; /* da chiusa non deve sporgere niente */
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  /* spazio sotto l'ultimo elemento: si chiude insieme al corpo */
+  .site-body-inner::after {
+    content: "";
+    display: block;
+    height: 4px;
+  }
+
+  .site-desc {
+    font-size: 14px;
+    -webkit-line-clamp: unset;
+    display: block;
+  }
+
+  .site-btn {
+    flex: 1 1 auto;
+  }
+
+  /* Software in piccolo: poco più grandi dei tag */
+  .site-software {
+    gap: 6px;
+  }
+
+  .site-software .sw-pill {
+    gap: 6px;
+    padding: 2px 10px 2px 2px;
+    font-size: 12px;
+  }
+
+  .site-software .sw-pill .sw-chip {
+    width: 22px;
+    height: 22px;
+    font-size: 9.5px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Tablet (700–1199px): card compatte su due colonne, così se ne vedono di più */
+@media (min-width: 700px) and (max-width: 1199px) {
+  .sites-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
   }
 }
 
@@ -273,13 +350,6 @@ a.site-shot:focus-visible {
     margin-top: 8px;
     padding: 0 12px 32px;
     max-height: calc(100vh - 70px);
-  }
-  .site-desc {
-    font-size: 14px;
-  }
-  .site-btn {
-    flex: 1 1 auto;
-    justify-content: center;
   }
 }
 
@@ -296,7 +366,9 @@ a.site-shot:focus-visible {
     animation: none;
   }
   .site-shot-img,
-  .site-btn {
+  .site-btn,
+  .site-chevron,
+  .site-card--compact .site-body {
     transition: none;
   }
 }
@@ -308,23 +380,17 @@ body.dark .site-card {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
 }
 
-body.dark .site-shot,
-body.dark .site-bar {
+body.dark .site-shot {
   background: #2c2c30;
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-body.dark .site-bar i {
-  background: #55555c;
-}
-
-body.dark .site-bar-url {
-  background: #1f1f22;
-  color: #a5a5ad;
-}
-
 body.dark .site-title {
   color: #f2f2f4;
+}
+
+body.dark .site-chevron {
+  color: #c8c8ce;
 }
 
 body.dark .site-desc {
